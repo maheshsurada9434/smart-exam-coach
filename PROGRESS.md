@@ -63,6 +63,17 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - [x] README + schema docs + limitations
 - [x] Definition-of-Done audit
 
+## Day 9: Study material
+- [ ] Generator scripts: Quant (~400) + Reasoning (~400)
+- [ ] English questions (~350) + English packs (vocabulary, idioms, OWS, grammar)
+- [ ] GA questions (~350) + Polity + GA fact packs
+- [ ] Current affairs (researched, sourced) + Andaman patterns
+- [ ] Starter loader UI + validation tests, CI green
+
+## Day 10: UI/UX + animation
+- [ ] Read ui-ux-pro-max skill, write design decisions
+- [ ] Apply design system + motion, CI green (incl. e2e + axe)
+
 ## Session log
 - 2026-10-22: Created resume system and day-wise plan. Starting Day 1.
 - 2026-10-22: Added 70% token stop rule (stop at 4,500,000 tokens left of 15,000,000).
@@ -86,3 +97,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: DAY 7 DONE. CI run 39769901235 green first try. Study time = measured time on questions (+ planner minutes logged separately); no current-affairs sample content (must come from dated sources). Next: Day 8 QA, accessibility, perf, README, DoD audit.
 - 2026-10-22: Day 8 written: service worker (versioned per build, precache.json) + manifest + PNG icons; Playwright e2e (12-step flow, deep link/refresh, 320/375 overflow, reduced motion, axe light/dark, offline) in a CI e2e job; bundle size + Lighthouse notices. Pushed; waiting for CI.
 - 2026-10-22: DAY 8 DONE. CI run 39779901340 all green: lint, typecheck, unit/integration, build, Playwright e2e 8/8 (12-step flow, refresh, 320/375 overflow, reduced motion, axe light+dark, offline), deploy, live smoke on the real Pages URL. Lighthouse mobile: Perf 95, A11y 100, BP 100. JS 275 KB gz. E2E found + fixed: answer selection lag in mock/timed practice. Added job timeouts after a stuck runner. See docs/DOD.md. PROJECT COMPLETE (v1).
+- 2026-10-22: User asked for full material + design pass. Added Day 9 (material) and Day 10 (UI/UX). Starting Day 9.
