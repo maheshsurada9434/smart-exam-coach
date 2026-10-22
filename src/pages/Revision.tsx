@@ -10,6 +10,10 @@ import { correctAnswerLabel, type Question } from '../questions/schema'
 import { isCorrect, type Response } from '../practice/engine'
 import { addDays, localDate } from '../learning/dates'
 import { GRADES } from '../learning/sm2'
+import ContentItemView from '../components/ContentItemView'
+import { loadContent, quizOptions } from '../content/repo'
+import type { ContentItem } from '../content/schema'
+import { seededRng } from '../practice/engine'
 import { dueItems, removeItem, reviewItem, revisionCounts, revisionItems, syncQuestionItems, type RevisionItem } from '../learning/repo'
 
 type Mode = 'mcq' | 'flashcard'
@@ -35,12 +39,29 @@ export default function Revision() {
     })
   }, [today, synced])
   const questions = useLiveQuery(async () => new Map((await loadQuestions()).questions.map((q) => [q.id, q])))
+  const cards = useLiveQuery(async () => (await loadContent()).items)
 
-  if (!synced || !counts || !upcoming || !questions) return <Skeleton className="h-96 w-full" />
+  if (!synced || !counts || !upcoming || !questions || !cards) return <Skeleton className="h-96 w-full" />
 
   if (queue) {
     const item = queue[0]
     if (!item) return <Summary done={done} onBack={() => (setQueue(null), setDone([]))} />
+    const common = {
+      key: item.id,
+      item,
+      mode,
+      position: done.length + 1,
+      total: done.length + queue.length,
+      onGraded: (d: Done) => {
+        setDone((x) => [...x, d])
+        setQueue((x) => x!.slice(1))
+      },
+      onRemoved: () => setQueue((x) => x!.slice(1)),
+    }
+    if (item.kind === 'card') {
+      const { key, ...rest } = common
+      return <CardReview key={key} {...rest} card={cards.find((c) => c.id === item.refId)} pool={cards} />
+    }
     return (
       <ReviewCard
         key={item.id}
@@ -66,6 +87,11 @@ export default function Revision() {
         Spaced repetition (SM-2). Questions you got wrong and your bookmarks are added automatically. An item only moves to a longer
         interval when you recall it, never just by opening it.
       </p>
+      <p className="mt-1 text-sm">
+        <Link className="text-accent underline" to="/content">
+          Vocabulary, idioms, Polity and current affairs →
+        </Link>
+      </p>
       <div className="mt-4 grid grid-cols-3 gap-3">
         {[
           ['Overdue', counts.overdue],
@@ -82,7 +108,7 @@ export default function Revision() {
       {counts.total === 0 ? (
         <div className="mt-4">
           <EmptyState icon={<Repeat size={28} aria-hidden />} title="Nothing to revise yet">
-            Practise some questions or bookmark them; wrong answers and bookmarks appear here for review.{' '}
+            Practise some questions or bookmark them, or add study content; they appear here for review.{' '}
             <Link className="text-accent underline" to="/practice">Go to practice</Link>
           </EmptyState>
         </div>
@@ -231,6 +257,99 @@ function Summary({ done, onBack }: { done: Done[]; onBack: () => void }) {
         <Button className="mt-4" onClick={onBack}>
           Back to revision
         </Button>
+      </Card>
+    </section>
+  )
+}
+
+type CardProps = {
+  item: RevisionItem
+  card: ContentItem | undefined
+  pool: ContentItem[]
+  mode: Mode
+  position: number
+  total: number
+  onGraded: (d: Done) => void
+  onRemoved: () => void
+}
+
+/** Content cards: flashcard (self-graded) or multiple choice built from other stored answers of the same kind. */
+function CardReview({ item, card, pool, mode, position, total, onGraded, onRemoved }: CardProps) {
+  const toast = useToast()
+  const [picked, setPicked] = useState<string | null>(null)
+  const [revealed, setRevealed] = useState(false)
+  const options = card && mode === 'mcq' ? quizOptions(card, pool, seededRng(position * 7919 + item.id.length)) : null
+
+  const grade = async (quality: number) => {
+    try {
+      const next = await reviewItem(item.id, quality)
+      if (next) onGraded({ item, quality, nextDue: next.due })
+    } catch (e) {
+      toast(describeDbError(e))
+    }
+  }
+
+  if (!card)
+    return (
+      <Card className="mx-auto max-w-3xl">
+        <p className="text-sm">This study item is no longer stored.</p>
+        <Button className="mt-3" variant="secondary" onClick={() => removeItem(item.id).then(onRemoved)}>
+          Remove from revision
+        </Button>
+      </Card>
+    )
+
+  const right = picked === card.back
+  return (
+    <section className="mx-auto max-w-3xl">
+      <p className="text-sm text-muted">
+        Item {position} of {total} · {item.reason}
+      </p>
+      <div className="mt-2">
+        <Progress value={((position - 1) / total) * 100} label={`Reviewed ${position - 1} of ${total}`} />
+      </div>
+      <Card className="mt-4">
+        {!revealed ? (
+          <p className="text-base font-semibold">{card.kind === 'ows' ? `One word for: ${card.front}` : card.front}</p>
+        ) : (
+          <ContentItemView c={card} />
+        )}
+        {options && !revealed && (
+          <div className="mt-3 space-y-2">
+            {options.map((o) => (
+              <button
+                key={o}
+                type="button"
+                onClick={() => setPicked(o)}
+                aria-pressed={picked === o}
+                className={`flex min-h-11 w-full items-center rounded-md border px-3 text-left text-sm ${picked === o ? 'border-accent bg-accent-soft' : 'border-border'}`}
+              >
+                {o}
+              </button>
+            ))}
+          </div>
+        )}
+        {revealed && options && (
+          <p className={`mt-3 text-sm font-semibold ${right ? 'text-success' : 'text-danger'}`} role="status">
+            {right ? 'Correct' : `Incorrect. You chose: ${picked}`}
+          </p>
+        )}
+        <div className="mt-4 flex flex-wrap gap-2">
+          {!revealed ? (
+            <Button onClick={() => setRevealed(true)} disabled={!!options && picked === null}>
+              {options ? 'Check answer' : 'Show answer'}
+            </Button>
+          ) : options && !right ? (
+            <Button onClick={() => grade(1)}>Next (review again tomorrow)</Button>
+          ) : (
+            GRADES.filter((g) => !options || g.quality >= 3).map((g) => (
+              <Button key={g.label} variant={g.quality === 4 ? 'primary' : 'secondary'} onClick={() => grade(g.quality)}>
+                {g.label}
+                <span className="text-xs opacity-80">· {g.hint}</span>
+              </Button>
+            ))
+          )}
+        </div>
       </Card>
     </section>
   )

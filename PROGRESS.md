@@ -50,10 +50,10 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - [x] Day 6 tests + checks pass, committed
 
 ## Day 7: Dashboard + content
-- [~] Dashboard (real data) (written, waiting for CI)
-- [~] Performance analytics (written, waiting for CI)
-- [ ] Vocabulary module
-- [ ] Current Affairs + Polity framework
+- [x] Dashboard (real data)
+- [x] Performance analytics
+- [~] Vocabulary module (written, waiting for CI)
+- [~] Current Affairs + Polity framework (written, waiting for CI)
 - [ ] Day 7 checks pass, committed
 
 ## Day 8: QA + docs
@@ -81,3 +81,5 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: Day 6 code written: dates, mastery labels (docs/ALGORITHMS.md), SM-2, recommendations with reasons, budget-capped planner (day/week, edit, reorder, skip, done+actual, reschedule, manual tasks), Revision (MCQ recall + flashcards, summary), Settings study days + exam date. Practice weak mode now uses mastery. Pushed; waiting for CI.
 - 2026-10-22: DAY 6 DONE. CI run 39768019808 green first try (dates, mastery, SM-2, recommendations order, planner budget cap, regenerate keeps user work, reschedule, Revision + Planner screens). Exam relevance not weighted (patterns unverified). Next: Day 7 dashboard, analytics, vocabulary, current affairs/polity.
 - 2026-10-22: Day 7A written: analytics/stats (filters, groups, daily/weekly, trend, repeated errors, coverage), dashboard from real data + onboarding, Performance page with Recharts + text summaries + CSV export. Recharts 2.15.0 added (lockfile via CI). Next: 7B content module.
+- 2026-10-22: Day 7A green (CI run 39769399495): dashboard + performance. Working on 7B content.
+- 2026-10-22: Day 7B written: content schema (word/idiom/ows/grammar/polity/current-affairs/ga-fact) with source/date/text-type rules, DB v4 contentItems, JSON/CSV import + dedupe, Study content page (/content: word of the day, quizzes from stored answers, add to revision), card review in Revision (MCQ or flashcard), DEV sample (no current affairs), docs/CONTENT.md. Pushed; waiting for CI.

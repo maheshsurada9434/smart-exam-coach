@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
+import { Link } from 'react-router-dom'
 import { ExternalLink } from 'lucide-react'
 import { Card, EmptyState } from '../components/ui'
 import VerificationBadge from '../components/VerificationBadge'
@@ -24,6 +25,11 @@ export default function Syllabus() {
   return (
     <section>
       <h1 className="text-2xl font-semibold">Syllabus</h1>
+      <p className="mt-1 text-sm">
+        <Link className="text-accent underline" to="/content">
+          Study content: vocabulary, idioms, Polity, current affairs →
+        </Link>
+      </p>
       <div role="tablist" aria-label="Exam" className="mt-4 flex gap-2 overflow-x-auto pb-1">
         {EXAMS.map((e) => (
           <button

@@ -3,7 +3,7 @@
 All student data is stored in the browser's IndexedDB (database `smart-exam-coach`), via Dexie.
 It is not encrypted and not synced. Clearing site data or losing the device deletes it unless a backup was downloaded.
 
-## Tables (schema version 3)
+## Tables (schema version 4)
 | Table | Key | Indexes | Holds |
 |---|---|---|---|
 | prefs | id (`"prefs"`) | | exam, minutes per day, study days, target date |
@@ -18,10 +18,12 @@ It is not encrypted and not synced. Clearing site data or losing the device dele
 | reviewLogs | id | itemId, reviewedAt | revision history |
 | importLogs | id | createdAt | question import reports |
 | errorReports | id | questionId, status, createdAt | problems students reported with a question |
+| contentItems | id | pack, kind | study content (vocabulary, idioms, polity, current affairs…), see CONTENT.md |
 
 ## Migrations
 - v1 → v2: `questions.examCode` (string) became `examCodes` (array); added `contentKey` index and `questionVersions` table.
 - v2 → v3: added `errorReports`.
+- v3 → v4: added `contentItems`.
 Released versions are never edited. A change adds `version(N+1).stores({...}).upgrade(tx => ...)` in `src/db/db.ts`.
 The app never clears the database on startup. A malformed row is reported, not deleted.
 
@@ -36,4 +38,4 @@ The app never clears the database on startup. A malformed row is reported, not d
 - Every row needs a string `id`; IDs must be unique per table; unknown tables are rejected.
 - **Merge** adds rows whose ID is new and keeps existing rows unchanged.
 - **Replace** (asks for confirmation) clears the student tables and writes the backup in one transaction.
-- The question bank is not part of this file; it has its own export (Day 3).
+- The question bank and study content are not part of this file; they have their own exports.
