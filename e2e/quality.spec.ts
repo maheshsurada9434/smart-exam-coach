@@ -54,7 +54,7 @@ for (const theme of ['light', 'dark'] as const) {
       await expect(page.locator('main h1').first()).toBeVisible()
       const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()
       for (const v of res.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical'))
-        problems.push(`/${r}: ${v.id} (${v.impact}) ${v.nodes.slice(0, 3).map((n) => n.target.join(' ')).join(' | ')}`)
+        problems.push(`/${r}: ${v.id} (${v.impact}) ${v.nodes.slice(0, 3).map((n) => `${n.target.join(' ')} ${JSON.stringify(n.any[0]?.data ?? '')}`).join(' | ')}`)
     }
     expect(problems, problems.join('\n')).toEqual([])
   })
