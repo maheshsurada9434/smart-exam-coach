@@ -57,7 +57,7 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - [x] Day 7 checks pass, committed
 
 ## Day 8: QA + docs
-- [ ] Playwright E2E (or reported as not runnable)
+- [~] Playwright E2E (or reported as not runnable) (written, waiting for CI)
 - [ ] Accessibility + mobile + reduced-motion pass
 - [ ] Perf measurement
 - [ ] README + schema docs + limitations
@@ -84,3 +84,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: Day 7A green (CI run 39769399495): dashboard + performance. Working on 7B content.
 - 2026-10-22: Day 7B written: content schema (word/idiom/ows/grammar/polity/current-affairs/ga-fact) with source/date/text-type rules, DB v4 contentItems, JSON/CSV import + dedupe, Study content page (/content: word of the day, quizzes from stored answers, add to revision), card review in Revision (MCQ or flashcard), DEV sample (no current affairs), docs/CONTENT.md. Pushed; waiting for CI.
 - 2026-10-22: DAY 7 DONE. CI run 39769901235 green first try. Study time = measured time on questions (+ planner minutes logged separately); no current-affairs sample content (must come from dated sources). Next: Day 8 QA, accessibility, perf, README, DoD audit.
+- 2026-10-22: Day 8 written: service worker (versioned per build, precache.json) + manifest + PNG icons; Playwright e2e (12-step flow, deep link/refresh, 320/375 overflow, reduced motion, axe light/dark, offline) in a CI e2e job; bundle size + Lighthouse notices. Pushed; waiting for CI.
