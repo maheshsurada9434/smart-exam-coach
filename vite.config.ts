@@ -7,7 +7,7 @@ const precacheList = (): Plugin => ({
   name: 'precache-list',
   apply: 'build',
   generateBundle(_, bundle) {
-    const files = [...Object.keys(bundle), 'manifest.webmanifest', 'favicon.svg', 'icon-192.png', 'icon-512.png', 'templates/questions-template.csv', 'templates/content-template.csv']
+    const files = [...Object.keys(bundle), 'manifest.webmanifest', 'favicon.svg', 'icon-192.png', 'icon-512.png', 'templates/questions-template.csv', 'templates/content-template.csv', 'data/starter-questions.json', 'data/starter-content.json']
     this.emitFile({ type: 'asset', fileName: 'precache.json', source: JSON.stringify(files.filter((f) => f !== 'index.html')) })
   },
 })

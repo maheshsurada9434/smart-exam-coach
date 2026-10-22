@@ -157,13 +157,27 @@ export const EXAMS: Exam[] = [
   },
   {
     code: 'ANI',
-    name: 'Andaman & Nicobar recruitment',
+    name: 'A&N Administration: Combined Matric Level (Group C)',
     family: 'ANI',
-    patternVersion: 'none',
-    verification: 'unverified',
-    sources: [],
-    note: 'Patterns differ by post and notification. No pattern has been added yet; add one from the official notification for your post.',
-    papers: [],
+    patternVersion: 'Advt. No. 01/ML/2026',
+    verification: 'secondary',
+    sources: [
+      { label: 'Official recruitment portal (check the notification PDF)', url: 'https://erecruitment.andamannicobar.gov.in' },
+      { label: 'FreeJobAlert summary of Advt. No. 01/ML/2026 (Jun–Jul 2026)', url: 'https://www.freejobalert.com/articles/andaman-and-nicobar-combined-matric-level-exam-2026-apply-online-for-1535-group-c-posts-3052810' },
+    ],
+    note: 'Tier I (Tablet Based Test) pattern for the 2026 Matric-level Group C posts; Tier II (physical, skill or trade test) is qualifying only. Other A&N posts (for example graduate-level or Police) use different patterns. Check the official notification before relying on it.',
+    papers: [
+      {
+        name: 'Tier I (Tablet Based Test)',
+        durationMin: 120,
+        sections: [
+          s('General Intelligence and Reasoning', 'Reasoning', 25, 1, 0.25),
+          s('Numerical Aptitude', 'Quantitative Aptitude', 25, 1, 0.25),
+          s('English Language', 'English', 50, 1, 0.25),
+          s('General Awareness', 'General Awareness', 50, 1, 0.25),
+        ],
+      },
+    ],
   },
 ]
 

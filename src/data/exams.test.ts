@@ -22,11 +22,12 @@ describe('exam config', () => {
     expect(totals('SSC_CHSL')).toEqual([[100, 200]])
     expect(totals('SSC_MTS')).toEqual([[40, 120], [50, 150]])
     expect(totals('SSC_GD')).toEqual([[80, 160]])
+    expect(totals('ANI')).toEqual([[150, 150]])
   })
 
   it('never claims official verification without an official source', () => {
     for (const e of EXAMS) if (e.verification === 'official') expect(e.sources.length).toBeGreaterThan(0)
-    expect(examByCode('ANI')!.papers).toEqual([])
+    expect(EXAMS.every((e) => e.verification !== 'official')).toBe(true) // nothing checked against a PDF yet
   })
 
   it('has topics for every subject', () => {

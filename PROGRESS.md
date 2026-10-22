@@ -64,11 +64,11 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - [x] Definition-of-Done audit
 
 ## Day 9: Study material
-- [ ] Generator scripts: Quant (~400) + Reasoning (~400)
-- [ ] English questions (~350) + English packs (vocabulary, idioms, OWS, grammar)
-- [ ] GA questions (~350) + Polity + GA fact packs
-- [ ] Current affairs (researched, sourced) + Andaman patterns
-- [ ] Starter loader UI + validation tests, CI green
+- [x] Generator scripts: Quant (~400) + Reasoning (~400)
+- [x] English questions (~350) + English packs (vocabulary, idioms, OWS, grammar)
+- [x] GA questions (~350) + Polity + GA fact packs
+- [x] Current affairs (researched, sourced) + Andaman patterns
+- [~] Starter loader UI + validation tests, CI green (written, waiting for CI)
 
 ## Day 10: UI/UX + animation
 - [ ] Read ui-ux-pro-max skill, write design decisions
@@ -98,3 +98,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: Day 8 written: service worker (versioned per build, precache.json) + manifest + PNG icons; Playwright e2e (12-step flow, deep link/refresh, 320/375 overflow, reduced motion, axe light/dark, offline) in a CI e2e job; bundle size + Lighthouse notices. Pushed; waiting for CI.
 - 2026-10-22: DAY 8 DONE. CI run 39779901340 all green: lint, typecheck, unit/integration, build, Playwright e2e 8/8 (12-step flow, refresh, 320/375 overflow, reduced motion, axe light+dark, offline), deploy, live smoke on the real Pages URL. Lighthouse mobile: Perf 95, A11y 100, BP 100. JS 275 KB gz. E2E found + fixed: answer selection lag in mock/timed practice. Added job timeouts after a stuck runner. See docs/DOD.md. PROJECT COMPLETE (v1).
 - 2026-10-22: User asked for full material + design pass. Added Day 9 (material) and Day 10 (UI/UX). Starting Day 9.
+- 2026-10-22: Day 9 material built by `node scripts/build-starter.mjs`: 1,685 questions (QA 410, RE 400, EN 481, GA 368, CA 26) + 695 content entries in public/data/. A&N Combined Matric Level 2026 Tier I pattern added (secondary sources). Fixed normalize() so '-1' != '1' and math operators count. Loader UI + tests written; waiting for CI.

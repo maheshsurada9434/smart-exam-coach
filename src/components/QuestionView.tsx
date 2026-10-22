@@ -17,6 +17,9 @@ export default function QuestionView({ q, response, onChange, locked, reveal }: 
       {q.source.kind === 'dev-sample' && (
         <p className="mb-2 inline-block rounded border border-warning px-1.5 py-0.5 text-xs font-medium text-warning">DEV SAMPLE</p>
       )}
+      {q.source.kind === 'original' && (
+        <p className="mb-2 text-xs text-muted">Original practice question · not expert-reviewed</p>
+      )}
       {q.passage && <div className="mb-4 whitespace-pre-line rounded-md bg-surface-2 p-4 text-sm leading-relaxed">{q.passage}</div>}
       <p className="whitespace-pre-line text-base font-medium leading-relaxed">{q.text}</p>
       {q.image && <img src={q.image} alt="Figure for this question" className="mt-3 max-h-80 max-w-full rounded-md border border-border" />}

@@ -137,6 +137,23 @@ export async function removeDevContent() {
   return ids.length
 }
 
+/* ---------- starter content pack (public/data) ---------- */
+
+export async function loadStarterContent(fetcher: typeof fetch = fetch) {
+  const res = await fetcher(`${import.meta.env.BASE_URL}data/starter-content.json`)
+  if (!res.ok) throw new Error(`Could not download the starter content (${res.status}).`)
+  return commitContentImport(await previewContentImport('starter-content.json', await res.text()), 'skip-existing')
+}
+
+export async function removeStarterContent() {
+  const ids = (await db.contentItems.where('pack').equals('starter').primaryKeys()) as string[]
+  await db.transaction('rw', db.contentItems, db.revisionItems, async () => {
+    await db.contentItems.bulkDelete(ids)
+    await db.revisionItems.bulkDelete(ids.map((id) => `c:${id}`))
+  })
+  return ids.length
+}
+
 /* ---------- revision and daily items ---------- */
 
 export async function addToRevision(itemIds: string[], today = localDate(), now = new Date()) {

@@ -213,6 +213,27 @@ export async function removeDevSample() {
   return ids.length
 }
 
+/* ---------- starter question bank (public/data, built by scripts/build-starter.mjs) ---------- */
+
+export const STARTER_PREFIX = 'ST-'
+
+/** Fetches the shipped starter bank and imports it like any file: validated, deduplicated, existing IDs kept. */
+export async function loadStarterQuestions(fetcher: typeof fetch = fetch) {
+  const res = await fetcher(`${import.meta.env.BASE_URL}data/starter-questions.json`)
+  if (!res.ok) throw new Error(`Could not download the starter question bank (${res.status}).`)
+  const preview = await buildPreview('starter-questions.json', await res.text())
+  return commitImport(preview, 'skip-existing')
+}
+
+export async function removeStarterQuestions() {
+  const ids = (await db.questions.toCollection().primaryKeys()).filter((id) => String(id).startsWith(STARTER_PREFIX)) as string[]
+  await db.transaction('rw', db.questions, db.questionVersions, async () => {
+    await db.questions.bulkDelete(ids)
+    await db.questionVersions.where('questionId').anyOf(ids).delete()
+  })
+  return ids.length
+}
+
 /* ---------- export ---------- */
 
 export const questionsToJson = (questions: Question[], now = new Date()) =>
