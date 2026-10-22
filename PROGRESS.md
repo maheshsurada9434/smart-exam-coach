@@ -31,9 +31,9 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - [x] Day 3 tests + checks pass, committed
 
 ## Day 4: Practice engine
-- [ ] Question selection (all modes)
-- [ ] Practice UI + feedback + explanations
-- [ ] Attempts, bookmarks, notes
+- [~] Question selection (all modes) (written, waiting for CI)
+- [~] Practice UI + feedback + explanations (written, waiting for CI)
+- [~] Attempts, bookmarks, notes (written, waiting for CI)
 - [ ] Day 4 tests + checks pass, committed
 
 ## Day 5: Mock engine
@@ -74,3 +74,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: DAY 2 DONE. CI run 39762388649 green (lint, typecheck, unit + screen tests, build, deploy). Fixed: settings form race on load, toasts moved inside App. Exam patterns are 'secondary' (coaching-site summaries), not checked against ssc.gov.in PDFs; Andaman has no pattern. React Hook Form not used (2 fields). Next: Day 3 question bank + CSV import.
 - 2026-10-22: Day 3 code written: question schema + lifecycle, DB v2 migration, CSV parser, import preview/commit, edit with version history, CSV/JSON export, 14-question DEV sample, docs/QUESTIONS.md + JSON schema. Pushed; waiting for CI.
 - 2026-10-22: DAY 3 DONE. CI run 39763769384 green (lint, typecheck, all tests incl. v1->v2 migration, import/duplicates/versioning, build, deploy). Not built: student error reports (moved to Day 4 with the practice screen), CSV formula-injection escaping. Next: Day 4 practice engine.
+- 2026-10-22: Day 4 code written: engine (selection, weak rule, scoring summary), sessions with resume + timer from stored start, learning/timed modes, dup-safe attempts, results/review/retry, Bookmarks page, notes, error reports (DB v3) shown in question bank. Pushed; waiting for CI.

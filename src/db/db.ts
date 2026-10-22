@@ -15,6 +15,7 @@ export const STUDENT_TABLES = [
   'tasks',
   'revisionItems',
   'reviewLogs',
+  'errorReports',
 ] as const
 export type StudentTable = (typeof STUDENT_TABLES)[number]
 
@@ -30,6 +31,7 @@ export class ExamDB extends Dexie {
   declare reviewLogs: Table<Row, string>
   declare importLogs: Table<Row, string>
   declare questionVersions: Table<Row, string>
+  declare errorReports: Table<Row, string>
 
   constructor(name = DB_NAME) {
     super(name)
@@ -65,6 +67,8 @@ export class ExamDB extends Dexie {
             }
           }),
       )
+    // v3 (Day 4): students can report a problem with a question.
+    this.version(3).stores({ errorReports: 'id, questionId, status, createdAt' })
   }
 }
 
