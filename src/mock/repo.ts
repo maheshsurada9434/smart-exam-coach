@@ -31,7 +31,7 @@ function asMock(r: unknown): MockSession | undefined {
     typeof s.answers === 'object' && s.answers !== null &&
     typeof s.durationSec === 'number' &&
     !Number.isNaN(Date.parse(s.startedAt))
-  return ok ? { marked: {}, visited: {}, ...s } : undefined
+  return ok ? { ...s, marked: s.marked ?? {}, visited: s.visited ?? {} } : undefined
 }
 
 export const getMock = async (id: string) => asMock(await db.sessions.get(id))
