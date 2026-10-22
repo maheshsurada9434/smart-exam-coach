@@ -2,7 +2,7 @@ import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from 're
 import { Route, Routes } from 'react-router-dom'
 import Layout from './Layout'
 import { NAV } from './nav'
-import { Skeleton } from './components/ui'
+import { Skeleton, ToastProvider } from './components/ui'
 
 const Dashboard = lazy(() => import('./pages/Dashboard'))
 const Planned = lazy(() => import('./pages/Planned'))
@@ -22,6 +22,7 @@ const Loading = () => (
 
 export default function App() {
   return (
+    <ToastProvider>
     <Suspense fallback={<Loading />}>
       <Routes>
         <Route element={<Layout />}>
@@ -34,5 +35,6 @@ export default function App() {
         </Route>
       </Routes>
     </Suspense>
+    </ToastProvider>
   )
 }
