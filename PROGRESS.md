@@ -37,11 +37,11 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - [x] Day 4 tests + checks pass, committed
 
 ## Day 5: Mock engine
-- [~] Scoring engine + tests (written, waiting for CI)
-- [~] Exam UI + palette + submit (written, waiting for CI)
-- [~] Timer + refresh resume + auto-submit (written, waiting for CI)
-- [~] Result/review screens (written, waiting for CI)
-- [ ] Day 5 checks pass, committed
+- [x] Scoring engine + tests
+- [x] Exam UI + palette + submit
+- [x] Timer + refresh resume + auto-submit
+- [x] Result/review screens
+- [x] Day 5 checks pass, committed
 
 ## Day 6: Algorithms
 - [ ] Mastery + recommendations
@@ -77,3 +77,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: Day 4 code written: engine (selection, weak rule, scoring summary), sessions with resume + timer from stored start, learning/timed modes, dup-safe attempts, results/review/retry, Bookmarks page, notes, error reports (DB v3) shown in question bank. Pushed; waiting for CI.
 - 2026-10-22: DAY 4 DONE. CI run 39765053778 green first try (engine, sessions, timed submit idempotency, malformed session guard, end-to-end practice screen test). Weak-topic rule is a simple placeholder (>=5 attempts, <60%) until Day 6 mastery. Error reports stay in this browser only. Next: Day 5 mock test engine.
 - 2026-10-22: Day 5 code written: pure scoring (per-section, fractional, round2), buildMock from exam pattern (approved/published only, partial flag + scaled time), deadline-based saves, auto-submit, idempotent submit with frozen result, palette with 5 states, results by section/topic + review, history. Pushed; waiting for CI.
+- 2026-10-22: DAY 5 DONE. CI green after 2 fixes (TS duplicate-key in asMock; Dialog fallback when showModal missing). Tests cover all spec-12 cases: all correct/incorrect/unanswered, mixed, fractional, section marking, timeout, refresh, interrupted, duplicate submit, frozen score. Limitation: local timer/storage is not tamper-proof. Sectional time is proportional (not official). Next: Day 6 mastery, planner, SM-2.
