@@ -51,6 +51,9 @@ function ExamScreen({ s, questions }: { s: MockSession; questions: Question[] })
   const [confirm, setConfirm] = useState(false)
   const shownAt = useRef(Date.now())
   const submitting = useRef(false)
+  // Screen readers hear the time once at 5 and 1 minutes left, not every second.
+  const [announce, setAnnounce] = useState('')
+  const announced = useRef(new Set<number>())
   const examName = EXAMS.find((e) => e.code === s.examCode)?.name ?? s.examCode
 
   const submit = async (reason: 'manual' | 'timeout') => {
@@ -70,6 +73,11 @@ function ExamScreen({ s, questions }: { s: MockSession; questions: Question[] })
     const tick = () => {
       const l = secondsLeft(s.startedAt, s.durationSec)
       setLeft(l)
+      for (const mark of [300, 60])
+        if (l <= mark && l > 0 && !announced.current.has(mark) && s.durationSec > mark) {
+          announced.current.add(mark)
+          setAnnounce(`${mark / 60} minute${mark > 60 ? 's' : ''} left`)
+        }
       if (l === 0) submit('timeout')
     }
     tick()
@@ -129,6 +137,9 @@ function ExamScreen({ s, questions }: { s: MockSession; questions: Question[] })
           </p>
           {s.partial && <p className="text-xs text-warning">Partial test ({s.available} of {s.required} questions)</p>}
         </div>
+        <span role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+          {announce}
+        </span>
         <span role="timer" aria-label={`Time left ${fmt(left)}`} className={`inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 font-mono text-base font-semibold ${left < 300 ? 'border-danger text-danger' : 'border-border'}`}>
           <Timer size={16} aria-hidden /> {fmt(left)}
         </span>

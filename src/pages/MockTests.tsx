@@ -8,6 +8,7 @@ import { describeDbError } from '../db/db'
 import { getPrefs } from '../db/prefs'
 import { activeMock, mockHistory, planMock, startMock } from '../mock/repo'
 import type { MockPlan } from '../mock/engine'
+import { staggerStyle } from '../components/motion'
 
 const field = 'mt-1 block min-h-11 w-full rounded-md border border-border bg-surface px-3 text-sm'
 const withPapers = EXAMS.filter((e) => e.papers.length > 0)
@@ -155,10 +156,10 @@ export default function MockTests() {
       {data.history.length === 0 ? (
         <p className="mt-2 text-sm text-muted">No completed mock tests yet.</p>
       ) : (
-        <ul className="mt-3 space-y-2">
-          {data.history.map((h) => (
-            <li key={h.id}>
-              <Link to={`/mock-tests/run/${h.id}`} className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border bg-surface p-4 text-sm hover:bg-surface-2">
+        <ul className="stagger mt-3 space-y-2">
+          {data.history.map((h, i) => (
+            <li key={h.id} style={staggerStyle(i)}>
+              <Link to={`/mock-tests/run/${h.id}`} className="lift flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border bg-surface p-4 text-sm hover:bg-surface-2">
                 <span>
                   <strong>{EXAMS.find((e) => e.code === h.examCode)?.name ?? h.examCode}</strong> · {h.paperName}
                   {h.sectionName ? ` · ${h.sectionName}` : ''}

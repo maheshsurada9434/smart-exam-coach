@@ -6,6 +6,7 @@ import { db } from '../db/db'
 import { loadQuestions } from '../questions/repo'
 import { correctAnswerLabel } from '../questions/schema'
 import { toggleBookmark } from '../practice/repo'
+import { staggerStyle } from '../components/motion'
 
 export default function Bookmarks() {
   const data = useLiveQuery(async () => {
@@ -33,9 +34,9 @@ export default function Bookmarks() {
           >
             Practise bookmarked questions
           </Link>
-          <ul className="mt-4 space-y-2">
-            {data.map(({ id, q }) => (
-              <li key={id}>
+          <ul className="stagger mt-4 space-y-2">
+            {data.map(({ id, q }, i) => (
+              <li key={id} style={staggerStyle(i)}>
                 <Card className="flex items-start justify-between gap-3 p-4">
                   <div className="min-w-0 text-sm">
                     {q ? (

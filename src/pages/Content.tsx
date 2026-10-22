@@ -11,6 +11,7 @@ import { normalize } from '../questions/schema'
 import ContentItemView from '../components/ContentItemView'
 import { KIND_LABEL, QUIZ_KINDS, type ContentItem, type ContentKind } from '../content/schema'
 import {
+import { staggerStyle } from '../components/motion'
   addToRevision,
   commitContentImport,
   contentToJson,
@@ -67,8 +68,8 @@ export default function Content() {
         them with spaced repetition.
       </p>
 
-      <Card className="mt-4 flex flex-wrap items-center justify-between gap-4 border-accent">
-        <div className="max-w-2xl">
+      <Card className="mt-4 flex flex-col gap-4 border-accent sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0 max-w-2xl">
           <h2 className="font-semibold">Starter study pack</h2>
           <p className="mt-1 text-sm text-muted">
             About 700 entries: vocabulary with synonyms and antonyms, idioms, one-word substitutions, grammar rules, 57 Constitution articles
@@ -149,9 +150,9 @@ export default function Content() {
           </EmptyState>
         </div>
       ) : (
-        <ul className="mt-4 grid gap-3 md:grid-cols-2">
-          {items.map((c) => (
-            <li key={c.id}>
+        <ul className="stagger mt-4 grid gap-3 md:grid-cols-2">
+          {items.slice(0, 200).map((c, i) => (
+            <li key={c.id} style={staggerStyle(i)}>
               <Card className="h-full p-4">
                 <ContentItemView c={c} />
                 <Button
