@@ -1,3 +1,4 @@
+import { staggerStyle } from '../components/motion'
 import { useMemo, useState, type ChangeEvent } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { Link } from 'react-router-dom'
@@ -11,7 +12,6 @@ import { normalize } from '../questions/schema'
 import ContentItemView from '../components/ContentItemView'
 import { KIND_LABEL, QUIZ_KINDS, type ContentItem, type ContentKind } from '../content/schema'
 import {
-import { staggerStyle } from '../components/motion'
   addToRevision,
   commitContentImport,
   contentToJson,

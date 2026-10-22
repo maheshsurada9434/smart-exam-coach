@@ -1,3 +1,4 @@
+import { staggerStyle } from '../components/motion'
 import { useEffect, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { Link } from 'react-router-dom'
@@ -8,7 +9,6 @@ import { getPrefs } from '../db/prefs'
 import { addDays, localDate, weekday, WEEKDAYS } from '../learning/dates'
 import { studyDates, type TaskType } from '../learning/planner'
 import {
-import { staggerStyle } from '../components/motion'
   addManualTask,
   completeTask,
   generatePlan,
