@@ -52,9 +52,9 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 ## Day 7: Dashboard + content
 - [x] Dashboard (real data)
 - [x] Performance analytics
-- [~] Vocabulary module (written, waiting for CI)
-- [~] Current Affairs + Polity framework (written, waiting for CI)
-- [ ] Day 7 checks pass, committed
+- [x] Vocabulary module
+- [x] Current Affairs + Polity framework
+- [x] Day 7 checks pass, committed
 
 ## Day 8: QA + docs
 - [ ] Playwright E2E (or reported as not runnable)
@@ -83,3 +83,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: Day 7A written: analytics/stats (filters, groups, daily/weekly, trend, repeated errors, coverage), dashboard from real data + onboarding, Performance page with Recharts + text summaries + CSV export. Recharts 2.15.0 added (lockfile via CI). Next: 7B content module.
 - 2026-10-22: Day 7A green (CI run 39769399495): dashboard + performance. Working on 7B content.
 - 2026-10-22: Day 7B written: content schema (word/idiom/ows/grammar/polity/current-affairs/ga-fact) with source/date/text-type rules, DB v4 contentItems, JSON/CSV import + dedupe, Study content page (/content: word of the day, quizzes from stored answers, add to revision), card review in Revision (MCQ or flashcard), DEV sample (no current affairs), docs/CONTENT.md. Pushed; waiting for CI.
+- 2026-10-22: DAY 7 DONE. CI run 39769901235 green first try. Study time = measured time on questions (+ planner minutes logged separately); no current-affairs sample content (must come from dated sources). Next: Day 8 QA, accessibility, perf, README, DoD audit.
