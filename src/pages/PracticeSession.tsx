@@ -148,8 +148,11 @@ function Runner({ session, questions }: { session: Session; questions: Question[
         </p>
         <QuestionView
           q={q}
-          response={timed ? (saved?.response ?? null) : learningLocked ? saved!.response : draft}
-          onChange={(r) => (timed ? record(r) : setDraft(r))}
+          response={learningLocked ? saved!.response : draft}
+          onChange={(r) => {
+            setDraft(r) // shown at once; timed answers are also saved immediately
+            if (timed) record(r)
+          }}
           locked={learningLocked}
           reveal={learningLocked}
         />
