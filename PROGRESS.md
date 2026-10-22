@@ -57,11 +57,11 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - [x] Day 7 checks pass, committed
 
 ## Day 8: QA + docs
-- [~] Playwright E2E (or reported as not runnable) (written, waiting for CI)
-- [ ] Accessibility + mobile + reduced-motion pass
-- [ ] Perf measurement
-- [ ] README + schema docs + limitations
-- [ ] Definition-of-Done audit
+- [x] Playwright E2E (or reported as not runnable)
+- [x] Accessibility + mobile + reduced-motion pass
+- [x] Perf measurement
+- [x] README + schema docs + limitations
+- [x] Definition-of-Done audit
 
 ## Session log
 - 2026-10-22: Created resume system and day-wise plan. Starting Day 1.
@@ -85,3 +85,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: Day 7B written: content schema (word/idiom/ows/grammar/polity/current-affairs/ga-fact) with source/date/text-type rules, DB v4 contentItems, JSON/CSV import + dedupe, Study content page (/content: word of the day, quizzes from stored answers, add to revision), card review in Revision (MCQ or flashcard), DEV sample (no current affairs), docs/CONTENT.md. Pushed; waiting for CI.
 - 2026-10-22: DAY 7 DONE. CI run 39769901235 green first try. Study time = measured time on questions (+ planner minutes logged separately); no current-affairs sample content (must come from dated sources). Next: Day 8 QA, accessibility, perf, README, DoD audit.
 - 2026-10-22: Day 8 written: service worker (versioned per build, precache.json) + manifest + PNG icons; Playwright e2e (12-step flow, deep link/refresh, 320/375 overflow, reduced motion, axe light/dark, offline) in a CI e2e job; bundle size + Lighthouse notices. Pushed; waiting for CI.
+- 2026-10-22: DAY 8 DONE. CI run 39779901340 all green: lint, typecheck, unit/integration, build, Playwright e2e 8/8 (12-step flow, refresh, 320/375 overflow, reduced motion, axe light+dark, offline), deploy, live smoke on the real Pages URL. Lighthouse mobile: Perf 95, A11y 100, BP 100. JS 275 KB gz. E2E found + fixed: answer selection lag in mock/timed practice. Added job timeouts after a stuck runner. See docs/DOD.md. PROJECT COMPLETE (v1).
