@@ -15,7 +15,7 @@ test('new student: practice → dashboard → planner → revision → mock → 
   // 3–5. Practice session; answers are recorded.
   await nav(page, 'Practice')
   await page.getByRole('radio', { name: 'One topic' }).check()
-  await page.getByLabel('Topic').selectOption('Percentage')
+  await page.getByRole('combobox', { name: /^Topic/ }).selectOption('Percentage')
   await page.getByRole('button', { name: /Start practice/ }).click()
   await expect(page.getByText('What is 20% of 150?')).toBeVisible()
   await option(page, '30').check()
@@ -27,7 +27,7 @@ test('new student: practice → dashboard → planner → revision → mock → 
 
   await nav(page, 'Practice')
   await page.getByRole('radio', { name: 'One topic' }).check()
-  await page.getByLabel('Topic').selectOption('Average')
+  await page.getByRole('combobox', { name: /^Topic/ }).selectOption('Average')
   await page.getByRole('button', { name: /Start practice/ }).click()
   await option(page, '16').check() // wrong on purpose
   await page.getByRole('button', { name: 'Check answer' }).click()
