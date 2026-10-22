@@ -1,5 +1,7 @@
 # RESUME GUIDE (read this first in any new session)
 
+**Status: all 8 days are complete (v1). Future work = items under "Not done / not verified" in docs/DOD.md.**
+
 This project is built in day-wise stages. If a session ends (token limit, crash, new chat),
 **never restart from the beginning**. Continue from the first unchecked task.
 
