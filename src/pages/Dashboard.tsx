@@ -3,6 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { Link } from 'react-router-dom'
 import { ArrowRight, CircleHelp } from 'lucide-react'
 import { Card, Progress, Skeleton } from '../components/ui'
+import { CountUp, ProgressRing, staggerStyle } from '../components/motion'
 import { EXAMS, examByCode } from '../data/exams'
 import { localDate } from '../learning/dates'
 import { LABEL_TEXT } from '../learning/mastery'
@@ -34,10 +35,10 @@ function Onboarding({ data }: { data: Overview }) {
         A free, offline-friendly coach for SSC and Andaman &amp; Nicobar recruitment exams. Your records stay in this browser. No AI,
         no accounts, no paid services.
       </p>
-      <ol className="mt-6 grid gap-4 sm:grid-cols-3">
+      <ol className="stagger mt-6 grid gap-4 sm:grid-cols-3">
         {steps.map(([t, d, to, done], i) => (
-          <li key={t}>
-            <Card className="h-full">
+          <li key={t} style={staggerStyle(i)}>
+            <Card className="lift h-full">
               <h2 className="font-semibold">
                 {i + 1}. {t} {done && <span className="text-sm font-medium text-success">· done</span>}
               </h2>
@@ -52,6 +53,11 @@ function Onboarding({ data }: { data: Overview }) {
       <p className="mt-6 text-sm text-muted">No statistics are shown until you have practised: nothing here is sample or made-up data.</p>
     </section>
   )
+}
+
+const greeting = () => {
+  const h = new Date().getHours()
+  return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening'
 }
 
 function Explain({ children }: { children: string }) {
@@ -105,42 +111,59 @@ function DashboardView({ data, today }: { data: Overview; today: string }) {
         </div>
       </div>
 
-      {next && (
-        <Card className="mt-4 border-accent">
-          <p className="text-xs font-medium uppercase tracking-wide text-accent">Recommended next</p>
-          <p className="mt-1 text-sm">{next.reason}</p>
-          <Link to="/planner" className={`${linkBtn} mt-3 bg-accent text-accent-ink`}>
-            Open today’s plan <ArrowRight size={14} aria-hidden />
-          </Link>
-        </Card>
-      )}
+      {/* Today: the one place to start from. Every figure is real. */}
+      <Card className="animate-pop mt-4 flex flex-col gap-5 border-accent bg-gradient-to-br from-accent-soft to-surface p-5 sm:flex-row sm:items-center">
+        <ProgressRing
+          value={activeTasks ? (doneTasks / activeTasks) * 100 : 0}
+          label={activeTasks ? `${doneTasks} of ${activeTasks} of today's tasks done` : 'No tasks planned today'}
+        >
+          <span className="font-display text-xl font-semibold tabular">{activeTasks ? `${doneTasks}/${activeTasks}` : '—'}</span>
+          <span className="-mt-1 block text-[11px] text-muted">tasks today</span>
+        </ProgressRing>
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-medium uppercase tracking-wide text-accent">{greeting()} · Recommended next</p>
+          <p className="mt-1 text-base">{next ? next.reason : 'Practise a few questions so the planner can recommend what to study.'}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Link to={next ? '/planner' : '/practice'} className={`${linkBtn} lift bg-accent text-accent-ink`}>
+              {next ? 'Open today’s plan' : 'Start practising'} <ArrowRight size={14} aria-hidden />
+            </Link>
+            {data.revision.today + data.revision.overdue > 0 && (
+              <Link to="/revision" className={`${linkBtn} lift border border-border bg-surface`}>
+                Revise {data.revision.today + data.revision.overdue} due
+              </Link>
+            )}
+          </div>
+        </div>
+      </Card>
 
-      <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Card className="p-4">
+      <div className="stagger mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <Card className="p-4" style={staggerStyle(0)}>
           <p className="text-xs text-muted">Questions attempted</p>
-          <p className="mt-1 text-2xl font-semibold">{s.attempted}</p>
+          <p className="mt-1 font-display text-2xl font-semibold">
+            <CountUp value={s.attempted} />
+          </p>
           <Explain>Every answered question in practice and mock tests within the selected dates and exam.</Explain>
         </Card>
-        <Card className="p-4">
+        <Card className="p-4" style={staggerStyle(1)}>
           <p className="text-xs text-muted">Accuracy</p>
-          <p className="mt-1 text-2xl font-semibold">{pct(s.accuracy)}</p>
+          <p className="mt-1 font-display text-2xl font-semibold">{s.accuracy === null ? '—' : <CountUp value={Math.round(s.accuracy * 100)} suffix="%" />}</p>
           {s.attempted > 0 && s.provisional && <p className="text-xs text-warning">Provisional: fewer than 20 attempts</p>}
           <Explain>Correct answers ÷ answered questions. Unanswered questions are not counted. This is not a mock-test score.</Explain>
         </Card>
-        <Card className="p-4">
+        <Card className="p-4" style={staggerStyle(2)}>
           <p className="text-xs text-muted">Time on questions</p>
-          <p className="mt-1 text-2xl font-semibold">{minutes(s.timeMs)}</p>
+          <p className="mt-1 font-display text-2xl font-semibold tabular">{minutes(s.timeMs)}</p>
           <Explain>Measured time from showing a question to answering it. Reading notes or concepts is not included.</Explain>
         </Card>
-        <Card className="p-4">
+        <Card className="p-4" style={staggerStyle(3)}>
           <p className="text-xs text-muted">Latest mock score</p>
-          <p className="mt-1 text-2xl font-semibold">{lastMock?.result ? `${lastMock.result.marks} / ${lastMock.result.maxMarks}` : '—'}</p>
+          <p className="mt-1 font-display text-2xl font-semibold tabular">{lastMock?.result ? `${lastMock.result.marks} / ${lastMock.result.maxMarks}` : '—'}</p>
           {lastMock?.partial && <p className="text-xs text-warning">Partial test</p>}
           <Explain>Raw marks with the exam's negative marking, from your most recent submitted mock test.</Explain>
         </Card>
       </div>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-3">
+      <div className="stagger mt-4 grid gap-4 lg:grid-cols-3">
         <Card>
           <h2 className="font-semibold">Today’s plan</h2>
           {activeTasks === 0 ? (
@@ -188,7 +211,7 @@ function DashboardView({ data, today }: { data: Overview; today: string }) {
         </Card>
       </div>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+      <div className="stagger mt-4 grid gap-4 lg:grid-cols-2">
         <Card>
           <h2 className="font-semibold">Topic mastery</h2>
           {data.mastery.length === 0 ? (

@@ -21,7 +21,7 @@ export default function QuestionView({ q, response, onChange, locked, reveal }: 
         <p className="mb-2 text-xs text-muted">Original practice question · not expert-reviewed</p>
       )}
       {q.passage && <div className="mb-4 whitespace-pre-line rounded-md bg-surface-2 p-4 text-sm leading-relaxed">{q.passage}</div>}
-      <p className="whitespace-pre-line text-base font-medium leading-relaxed">{q.text}</p>
+      <p className="whitespace-pre-line text-base font-medium leading-relaxed sm:text-lg">{q.text}</p>
       {q.image && <img src={q.image} alt="Figure for this question" className="mt-3 max-h-80 max-w-full rounded-md border border-border" />}
 
       {q.type === 'mcq' ? (
@@ -35,13 +35,24 @@ export default function QuestionView({ q, response, onChange, locked, reveal }: 
               <label
                 key={i}
                 className={[
-                  'flex min-h-12 cursor-pointer items-center gap-3 rounded-md border px-4 py-2 text-sm transition duration-fast',
+                  'relative flex min-h-12 cursor-pointer items-center gap-3 rounded-md border px-4 py-2 text-[15px] transition-colors duration-fast focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[var(--color-focus)]',
                   isAnswer ? 'border-success bg-surface' : wrongChoice ? 'border-danger bg-surface' : chosen ? 'border-accent bg-accent-soft' : 'border-border bg-surface hover:bg-surface-2',
                   locked ? 'cursor-default' : '',
                 ].join(' ')}
               >
-                <input type="radio" name={`q-${q.id}`} className="h-4 w-4 accent-[var(--color-accent)]" checked={chosen} onChange={() => onChange?.(i)} />
-                <span className="font-semibold">{OPTION_LETTERS[i]}.</span>
+                <input
+                  type="radio"
+                  name={`q-${q.id}`}
+                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0 disabled:cursor-default"
+                  checked={chosen}
+                  onChange={() => onChange?.(i)}
+                />
+                <span
+                  className={`grid h-7 w-7 shrink-0 place-items-center rounded-full border text-xs font-semibold transition-colors duration-fast ${chosen ? 'border-accent bg-accent text-accent-ink' : 'border-border bg-surface-2'}`}
+                >
+                  {OPTION_LETTERS[i]}
+                  <span className="sr-only">.</span>
+                </span>
                 <span className="flex-1">{opt}</span>
                 {isAnswer && (
                   <span className="inline-flex items-center gap-1 text-xs font-semibold text-success">
@@ -73,7 +84,7 @@ export default function QuestionView({ q, response, onChange, locked, reveal }: 
       )}
 
       {reveal && (
-        <div className="mt-4 rounded-md border border-border bg-surface-2 p-4 text-sm" role="status">
+        <div className="animate-pop mt-4 rounded-md border border-border bg-surface-2 p-4 text-sm" role="status">
           <p className={`flex items-center gap-1.5 font-semibold ${response === null ? 'text-muted' : correct ? 'text-success' : 'text-danger'}`}>
             {response === null ? 'Not answered' : correct ? <><Check size={16} aria-hidden /> Correct</> : <><X size={16} aria-hidden /> Incorrect</>}
             {q.type === 'numerical' && <span className="font-normal text-ink">· Answer: {q.correctValue}{q.tolerance ? ` (±${q.tolerance})` : ''}</span>}

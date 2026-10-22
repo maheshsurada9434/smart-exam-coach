@@ -8,6 +8,7 @@ import { getPrefs } from '../db/prefs'
 import { addDays, localDate, weekday, WEEKDAYS } from '../learning/dates'
 import { studyDates, type TaskType } from '../learning/planner'
 import {
+import { staggerStyle } from '../components/motion'
   addManualTask,
   completeTask,
   generatePlan,
@@ -166,9 +167,9 @@ export default function Planner() {
               </EmptyState>
             </div>
           ) : (
-            <ol className="mt-4 space-y-2">
+            <ol className="stagger mt-4 space-y-2">
               {tasks.map((t, i) => (
-                <TaskRow key={t.id} t={t} first={i === 0} last={i === tasks.length - 1} run={run} />
+                <TaskRow key={t.id} t={t} i={i} first={i === 0} last={i === tasks.length - 1} run={run} />
               ))}
             </ol>
           )}
@@ -179,13 +180,13 @@ export default function Planner() {
   )
 }
 
-function TaskRow({ t, first, last, run }: { t: Task; first: boolean; last: boolean; run: (fn: () => Promise<unknown>, ok?: string) => void }) {
+function TaskRow({ t, i, first, last, run }: { t: Task; i: number; first: boolean; last: boolean; run: (fn: () => Promise<unknown>, ok?: string) => void }) {
   const [actual, setActual] = useState(String(t.durationMin))
   const [mins, setMins] = useState(String(t.durationMin))
   const done = t.status === 'done'
   const skipped = t.status === 'skipped'
   return (
-    <li className={`animate-page-in rounded-lg border bg-surface p-4 ${done ? 'border-success' : 'border-border'} ${skipped ? 'opacity-60' : ''}`}>
+    <li style={staggerStyle(i)} className={`rounded-lg border bg-surface p-4 ${done ? 'border-success' : 'border-border'} ${skipped ? 'opacity-60' : ''}`}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="flex flex-wrap items-center gap-2 text-sm font-semibold">
@@ -297,7 +298,7 @@ function WeekView({ today, week, studyDays, onOpen, onRegenerate }: { today: str
           const rest = !studyDays.includes(weekday(d))
           return (
             <li key={d}>
-              <button type="button" onClick={() => onOpen(d)} className="flex w-full flex-wrap items-center justify-between gap-2 rounded-lg border border-border bg-surface p-4 text-left text-sm hover:bg-surface-2">
+              <button type="button" onClick={() => onOpen(d)} className="lift flex w-full flex-wrap items-center justify-between gap-2 rounded-lg border border-border bg-surface p-4 text-left text-sm hover:bg-surface-2">
                 <span className="font-medium">
                   {WEEKDAYS[weekday(d)]} {d}
                   {d === today && ' (today)'}

@@ -10,6 +10,7 @@ import { downloadText } from '../download'
 import { questionsToCsv } from '../questions/csv'
 import { STARTER_PREFIX, loadDevSample, loadQuestions, loadStarterQuestions, questionsToJson, removeDevSample, removeStarterQuestions } from '../questions/repo'
 import { STATUSES, correctAnswerLabel, normalize, type Question } from '../questions/schema'
+import { staggerStyle } from '../components/motion'
 
 const select = 'min-h-11 rounded-md border border-border bg-surface px-3 text-sm'
 const PAGE = 50
@@ -82,10 +83,10 @@ export default function QuestionBank() {
             )}
           </div>
 
-          <Card className="mt-4 flex flex-wrap items-center justify-between gap-4 border-accent">
-            <div className="flex max-w-2xl gap-3">
+          <Card className="mt-4 flex flex-col gap-4 border-accent sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex min-w-0 max-w-2xl gap-3">
               <Library size={22} className="mt-0.5 shrink-0 text-accent" aria-hidden />
-              <div>
+              <div className="min-w-0">
                 <h2 className="font-semibold">Starter question bank</h2>
                 <p className="mt-1 text-sm text-muted">
                   About 1,700 original practice questions for all four subjects, enough for full-length CGL, CHSL, MTS, GD and A&amp;N mocks.
@@ -175,9 +176,9 @@ export default function QuestionBank() {
               </EmptyState>
             </div>
           ) : (
-            <ul className="mt-4 space-y-2">
-              {filtered.slice(0, limit).map((q) => (
-                <li key={q.id} className="rounded-lg border border-border bg-surface p-4">
+            <ul className="stagger mt-4 space-y-2">
+              {filtered.slice(0, limit).map((q, i) => (
+                <li key={q.id} style={staggerStyle(i)} className="rounded-lg border border-border bg-surface p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <p className="flex flex-wrap items-center gap-2 text-xs text-muted">

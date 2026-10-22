@@ -7,9 +7,20 @@ import { useTheme } from './theme'
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   [
-    'flex min-h-11 items-center gap-3 rounded-md px-3 text-sm font-medium transition duration-fast',
-    isActive ? 'bg-accent-soft text-accent' : 'text-muted hover:bg-surface-2 hover:text-ink',
+    'relative flex min-h-11 items-center gap-3 rounded-md px-3 text-sm font-medium transition duration-fast',
+    // The bar on the left marks the current page without relying on colour alone.
+    "before:absolute before:left-0 before:top-2 before:bottom-2 before:w-1 before:rounded-full before:transition-transform before:duration-base before:content-['']",
+    isActive ? 'bg-accent-soft text-accent before:scale-y-100 before:bg-accent' : 'text-muted hover:bg-surface-2 hover:text-ink before:scale-y-0',
   ].join(' ')
+
+const Brand = () => (
+  <span className="flex items-center gap-2">
+    <span className="grid h-8 w-8 place-items-center rounded-lg bg-accent text-accent-ink shadow-card">
+      <GraduationCap size={18} aria-hidden />
+    </span>
+    <span className="font-display text-[17px] font-semibold tracking-tight">Smart Exam Coach</span>
+  </span>
+)
 
 export default function Layout() {
   const { theme, toggle } = useTheme()
@@ -29,9 +40,8 @@ export default function Layout() {
 
       {/* Desktop sidebar */}
       <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-border bg-surface md:flex">
-        <div className="flex items-center gap-2 px-5 py-5">
-          <GraduationCap className="text-accent" size={24} aria-hidden />
-          <span className="font-semibold">Smart Exam Coach</span>
+        <div className="px-5 py-5">
+          <Brand />
         </div>
         <nav aria-label="Main" className="flex-1 space-y-1 overflow-y-auto px-3">
           {NAV.map(({ to, label, icon: Icon }) => (
@@ -52,10 +62,7 @@ export default function Layout() {
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Mobile top bar */}
         <header className="sticky top-0 z-nav flex items-center justify-between border-b border-border bg-surface px-4 py-2 md:hidden">
-          <div className="flex items-center gap-2">
-            <GraduationCap className="text-accent" size={22} aria-hidden />
-            <span className="font-semibold">Smart Exam Coach</span>
-          </div>
+          <Brand />
           <button
             type="button"
             onClick={toggle}
@@ -82,11 +89,17 @@ export default function Layout() {
             to={to}
             end={to === '/'}
             className={({ isActive }) =>
-              `flex min-h-14 flex-col items-center justify-center gap-0.5 text-[11px] font-medium ${isActive ? 'text-accent' : 'text-muted'}`
+              `group flex min-h-14 flex-col items-center justify-center gap-0.5 text-[11px] font-medium ${isActive ? 'text-accent' : 'text-muted'}`
             }
           >
-            <Icon size={20} aria-hidden />
-            <span className="truncate">{label === 'Mock Tests' ? 'Mock' : label}</span>
+            {({ isActive }) => (
+              <>
+                <span className={`grid h-7 w-12 place-items-center rounded-full transition duration-base ${isActive ? 'bg-accent-soft' : ''}`}>
+                  <Icon size={20} aria-hidden />
+                </span>
+                <span className="truncate">{label === 'Mock Tests' ? 'Mock' : label}</span>
+              </>
+            )}
           </NavLink>
         ))}
         <button

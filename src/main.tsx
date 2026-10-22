@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { HashRouter } from 'react-router-dom'
 import App from './App'
 import { applyTheme, readTheme } from './theme'
+import '@fontsource-variable/inter'
+import '@fontsource-variable/bricolage-grotesque'
 import './index.css'
 
 applyTheme(readTheme())
