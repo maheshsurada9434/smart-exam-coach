@@ -52,9 +52,10 @@ for (const theme of ['light', 'dark'] as const) {
     for (const r of ROUTES) {
       await page.goto(`./#/${r}`)
       await expect(page.locator('main h1').first()).toBeVisible()
+      const cls = await page.evaluate(() => `${document.documentElement.className}|${getComputedStyle(document.body).color}`)
       const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()
       for (const v of res.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical'))
-        problems.push(`/${r}: ${v.id} (${v.impact}) ${v.nodes.slice(0, 3).map((n) => `${n.target.join(' ')} ${JSON.stringify(n.any[0]?.data ?? '')}`).join(' | ')}`)
+        problems.push(`/${r} [${cls}]: ${v.id} (${v.impact}) ${v.nodes.slice(0, 3).map((n) => `${n.target.join(' ')} ${n.html.slice(0, 160)} ${JSON.stringify(n.any[0]?.data ?? '')}`).join(' | ')}`)
     }
     expect(problems, problems.join('\n')).toEqual([])
   })
