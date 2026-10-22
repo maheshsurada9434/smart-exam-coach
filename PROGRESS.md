@@ -67,3 +67,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: Created resume system and day-wise plan. Starting Day 1.
 - 2026-10-22: Added 70% token stop rule (stop at 4,500,000 tokens left of 15,000,000).
 - 2026-10-22: Weekly usage baseline 29% (user screenshot). Stop at 70% weekly.
+- 2026-10-22: BLOCKER on Day 1. `npm install` fails: the session proxy answers 403 to CONNECT for registry.npmjs.org (policy denial, not retried or bypassed). package.json exists; no node_modules; no source code written yet. Day 1 stays at its first task until npm is reachable.
