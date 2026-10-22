@@ -1,5 +1,6 @@
 // Pure practice logic: no database, no UI. Everything here is deterministic for a given rng.
 import type { Question } from '../questions/schema'
+import { weakTopicNames } from '../learning/mastery'
 
 export const MISSING_EXPLANATION = 'Explanation not available yet. This question requires review.'
 
@@ -14,8 +15,6 @@ export const MODE_LABELS: Record<SelectionMode, string> = {
   bookmarked: 'My bookmarked questions',
 }
 
-/** Weak-topic rule until the Day 6 mastery model: enough evidence AND low accuracy. */
-export const WEAK_RULE = { minAttempts: 5, maxAccuracy: 0.6 }
 
 export type Response = number | null // mcq: option index; numerical: the value; null = unanswered
 export type AttemptLike = { questionId: string; topic: string; correct: boolean; createdAt: string }
@@ -52,11 +51,8 @@ export function topicStats(attempts: AttemptLike[]) {
   return m
 }
 
-export function weakTopics(attempts: AttemptLike[], rule = WEAK_RULE): string[] {
-  return [...topicStats(attempts)]
-    .filter(([, s]) => s.attempts >= rule.minAttempts && s.correct / s.attempts < rule.maxAccuracy)
-    .map(([t]) => t)
-}
+/** Weak = mastery label "Needs more practice" (enough attempts AND low recent accuracy). */
+export const weakTopics = (attempts: AttemptLike[]) => weakTopicNames(attempts)
 
 /** Latest attempt per question, by createdAt. */
 export function latestAttempts(attempts: AttemptLike[]) {
