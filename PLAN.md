@@ -1,0 +1,59 @@
+# Smart Exam Coach: Day-wise Plan
+
+Each "Day" is an independent, shippable milestone. Spec section numbers refer to `docs/SPEC.md`.
+Every day ends with checks (lint, typecheck, tests, build) and a git commit.
+
+## Day 1: Foundation (spec 2, 3, 4, 5, 6, 20)
+- Vite + React + TypeScript strict, Tailwind, React Router (HashRouter for GitHub Pages safety)
+- Design tokens (colors, type, spacing, radius, shadows, z-index, motion), light/dark theme
+- App shell: sidebar (desktop) + bottom nav (mobile), 9 route pages as stubs with honest empty states
+- Base components: Button, Card, Dialog, Toast, Skeleton, Progress, EmptyState
+- GitHub Pages: Vite base path, `.github/workflows/deploy.yml`
+- Vitest + ESLint + Prettier configured
+- Checks: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`
+
+## Day 2: Data layer + exam/syllabus config (spec 8, 21)
+- Dexie IndexedDB schema, versioned migrations, malformed-record handling, quota errors
+- Tables: preferences, attempts, mockAttempts, bookmarks, notes, plans, tasks, revisionItems, questions, imports
+- Exam/syllabus config as data files (SSC CGL/CHSL/MTS/GD, Andaman), unverified items flagged
+- Backup export / restore with schema validation and confirmation
+- Tests: migrations, backup round-trip, empty and malformed DB
+
+## Day 3: Question bank + import/export (spec 9, 10, 22)
+- Zod question schema, JSON schema doc, lifecycle Draft→Reviewed→Approved→Published→Archived
+- Validation utility, duplicate detection, error report
+- CSV import wizard: upload, preview, validate, confirm, commit valid rows, report counts
+- CSV/JSON export, small clearly-labelled DEV sample dataset
+- Tests: validation, duplicates, import edge cases
+
+## Day 4: Practice engine (spec 11, 16)
+- Modes: topic, subject, mixed, weak-topic, incorrect, bookmarked, timed, untimed
+- Config screen, question view, feedback per mode, explanations (with missing-explanation message)
+- Attempt recording, bookmarks, private notes, no-repeat selection
+- Tests: selection logic, attempt recording
+
+## Day 5: Mock test engine (spec 12)
+- Pure scoring engine (negative marking, fractional, sectional)
+- Exam UI: palette, mark-for-review, submit confirm, auto-submit on timeout
+- Elapsed-time timer from stored start time, resume after refresh, duplicate-submit guard
+- Result + review screen, topic-wise breakdown
+- Tests: all scoring cases listed in spec 12, timer expiry, refresh resume
+
+## Day 6: Algorithms: mastery, recommendations, planner, SM-2 (spec 13, 14, 15)
+- Mastery model with min sample sizes and confidence labels (config thresholds)
+- Recommendation engine with a reason for every item
+- Deterministic study planner (daily/weekly, edit, reorder, skip, reschedule, planned vs actual)
+- SM-2 spaced repetition; due/overdue/upcoming; flashcard + MCQ recall; summary
+- Tests: mastery, scheduling, interval maths, date boundaries
+
+## Day 7: Dashboard, analytics, content modules (spec 7, 17, 18, 19)
+- Dashboard from real data, onboarding state, filters, metric explanations
+- Performance charts (Recharts), provisional labels, accessible summaries, data export
+- Vocabulary module (packs, flashcards, quizzes), Current Affairs + Polity content framework
+
+## Day 8: Testing, accessibility, polish, deploy docs (spec 23, 24, 25, 26)
+- Playwright E2E (12-step flow from spec 25) if browser is available, otherwise reported
+- Accessibility pass, mobile 320px check, reduced motion
+- Bundle/perf measurement (real numbers only)
+- README, schema docs, known limitations, GitHub Pages instructions
+- Final Definition-of-Done audit against spec 28
