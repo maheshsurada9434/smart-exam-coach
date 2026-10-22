@@ -17,6 +17,7 @@ concurrency:
 
 jobs:
   check:
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -57,6 +58,7 @@ jobs:
           path: dist
 
   e2e:
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -95,6 +97,7 @@ jobs:
             console.log("::notice title=Lighthouse mobile::"+Object.values(r.categories).map(c=>c.title+" "+Math.round(c.score*100)).join(", ")+" | FCP "+a["first-contentful-paint"].displayValue+", LCP "+a["largest-contentful-paint"].displayValue+", TBT "+a["total-blocking-time"].displayValue+", CLS "+a["cumulative-layout-shift"].displayValue);'
 
   deploy:
+    timeout-minutes: 20
     needs: [check, e2e]
     if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
@@ -109,6 +112,7 @@ jobs:
 
   # Checks the real deployed site: assets, routing, IndexedDB, service worker and offline mode.
   live-smoke:
+    timeout-minutes: 20
     needs: deploy
     runs-on: ubuntu-latest
     steps:
