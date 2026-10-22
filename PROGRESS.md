@@ -65,3 +65,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 
 ## Session log
 - 2026-10-22: Created resume system and day-wise plan. Starting Day 1.
+- 2026-10-22: Added 70% token stop rule (stop at 4,500,000 tokens left of 15,000,000).
