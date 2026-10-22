@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design tokens. Components use these through Tailwind names (bg-surface, text-ink, ...). */
+:root {
+  --color-bg: #fbfaf7;
+  --color-surface: #ffffff;
+  --color-surface-2: #f4f2ec;
+  --color-border: #e6e2d8;
+  --color-ink: #0f1b33;
+  --color-muted: #566074;
+  --color-accent: #0f766e;
+  --color-accent-ink: #ffffff;
+  --color-accent-soft: #e3f2ef;
+  --color-danger: #b42318;
+  --color-success: #067647;
+  --color-warning: #b54708;
+  --color-focus: #0f766e;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --shadow-card: 0 1px 2px rgb(15 27 51 / 0.05), 0 1px 3px rgb(15 27 51 / 0.06);
+  --shadow-pop: 0 10px 30px rgb(15 27 51 / 0.14);
+
+  --dur-fast: 150ms;
+  --dur-base: 220ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+
+  color-scheme: light;
+}
+
+.dark {
+  --color-bg: #0b1120;
+  --color-surface: #111a2e;
+  --color-surface-2: #17223a;
+  --color-border: #26324c;
+  --color-ink: #e7ecf5;
+  --color-muted: #a0abc0;
+  --color-accent: #2dd4bf;
+  --color-accent-ink: #042f2b;
+  --color-accent-soft: #123b3a;
+  --color-danger: #f97066;
+  --color-success: #47cd89;
+  --color-warning: #fdb022;
+  --color-focus: #2dd4bf;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-pop: 0 10px 30px rgb(0 0 0 / 0.5);
+
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+
+body {
+  @apply font-sans antialiased;
+  transition:
+    background-color var(--dur-base) var(--ease),
+    color var(--dur-base) var(--ease);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes shimmer {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-page-in { animation: page-in var(--dur-base) var(--ease); }
+.animate-toast-in { animation: toast-in var(--dur-base) var(--ease); }
+.animate-shimmer { animation: shimmer 1.4s ease-in-out infinite; }
+
+dialog::backdrop { background: rgb(11 17 32 / 0.45); }
+dialog[open] { animation: page-in var(--dur-base) var(--ease); }
+
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
