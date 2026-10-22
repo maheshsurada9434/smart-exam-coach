@@ -1,0 +1,168 @@
+import { useMemo, useState } from 'react'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { Download, FlaskConical, Pencil, Trash2 } from 'lucide-react'
+import { Button, Card, EmptyState, Skeleton, useToast } from '../components/ui'
+import QuestionImport from '../components/QuestionImport'
+import QuestionEditDialog from '../components/QuestionEditDialog'
+import { EXAMS, SUBJECTS } from '../data/exams'
+import { describeDbError } from '../db/db'
+import { downloadText } from '../download'
+import { questionsToCsv } from '../questions/csv'
+import { loadDevSample, loadQuestions, questionsToJson, removeDevSample } from '../questions/repo'
+import { STATUSES, correctAnswerLabel, normalize, type Question } from '../questions/schema'
+
+const select = 'min-h-11 rounded-md border border-border bg-surface px-3 text-sm'
+const PAGE = 50
+
+export default function QuestionBank() {
+  const toast = useToast()
+  const data = useLiveQuery(() => loadQuestions())
+  const [exam, setExam] = useState('')
+  const [subject, setSubject] = useState('')
+  const [status, setStatus] = useState('')
+  const [search, setSearch] = useState('')
+  const [limit, setLimit] = useState(PAGE)
+  const [editing, setEditing] = useState<Question | null>(null)
+
+  const all = useMemo(() => data?.questions ?? [], [data])
+  const filtered = useMemo(() => {
+    const term = normalize(search)
+    return all.filter(
+      (q) =>
+        (!exam || q.examCodes.includes(exam)) &&
+        (!subject || q.subject === subject) &&
+        (!status || q.status === status) &&
+        (!term || normalize(`${q.id} ${q.text} ${q.topic}`).includes(term)),
+    )
+  }, [all, exam, subject, status, search])
+
+  const hasDev = all.some((q) => q.source.kind === 'dev-sample')
+  const run = async (fn: () => Promise<string>) => {
+    try {
+      toast(await fn())
+    } catch (e) {
+      toast(describeDbError(e))
+    }
+  }
+  const stamp = () => new Date().toISOString().slice(0, 10)
+
+  return (
+    <section>
+      <h1 className="text-2xl font-semibold">Question bank</h1>
+      <p className="mt-1 max-w-2xl text-sm text-muted">
+        Questions stored in this browser. Only <strong>approved</strong> or <strong>published</strong> questions are used in
+        scored mock tests.
+      </p>
+
+      {!data ? (
+        <Skeleton className="mt-6 h-40 w-full" />
+      ) : (
+        <>
+          <div className="mt-4 flex flex-wrap gap-2 text-sm">
+            <span className="rounded-md bg-surface-2 px-3 py-1.5">Total: {all.length}</span>
+            {STATUSES.map((s) => (
+              <span key={s} className="rounded-md bg-surface-2 px-3 py-1.5">
+                {s}: {all.filter((q) => q.status === s).length}
+              </span>
+            ))}
+            {data.malformed > 0 && (
+              <span role="alert" className="rounded-md border border-danger px-3 py-1.5 text-danger">
+                {data.malformed} stored rows are malformed and hidden
+              </span>
+            )}
+          </div>
+
+          <div className="mt-4 grid gap-4 lg:grid-cols-2">
+            <QuestionImport />
+            <Card>
+              <h2 className="font-semibold">Export and sample data</h2>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Button variant="secondary" disabled={!filtered.length} onClick={() => downloadText(`questions-${stamp()}.csv`, questionsToCsv(filtered), 'text/csv')}>
+                  <Download size={16} aria-hidden /> CSV ({filtered.length})
+                </Button>
+                <Button variant="secondary" disabled={!filtered.length} onClick={() => downloadText(`questions-${stamp()}.json`, questionsToJson(filtered))}>
+                  <Download size={16} aria-hidden /> JSON ({filtered.length})
+                </Button>
+              </div>
+              <p className="mt-4 text-sm text-muted">
+                The development sample is 14 simple questions written for testing the app. It is not exam content and is
+                labelled DEV SAMPLE everywhere.
+              </p>
+              <div className="mt-3">
+                {hasDev ? (
+                  <Button variant="ghost" onClick={() => run(async () => `Removed ${await removeDevSample()} sample questions`)}>
+                    <Trash2 size={16} aria-hidden /> Remove development sample
+                  </Button>
+                ) : (
+                  <Button variant="secondary" onClick={() => run(async () => `Added ${await loadDevSample()} sample questions`)}>
+                    <FlaskConical size={16} aria-hidden /> Load development sample
+                  </Button>
+                )}
+              </div>
+            </Card>
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-2">
+            <input className={select + ' min-w-48 flex-1'} placeholder="Search ID, text or topic" aria-label="Search questions" value={search} onChange={(e) => setSearch(e.target.value)} />
+            <select className={select} aria-label="Exam" value={exam} onChange={(e) => setExam(e.target.value)}>
+              <option value="">All exams</option>
+              {EXAMS.map((e) => (
+                <option key={e.code} value={e.code}>
+                  {e.name}
+                </option>
+              ))}
+            </select>
+            <select className={select} aria-label="Subject" value={subject} onChange={(e) => setSubject(e.target.value)}>
+              <option value="">All subjects</option>
+              {SUBJECTS.map((s) => (
+                <option key={s}>{s}</option>
+              ))}
+            </select>
+            <select className={select} aria-label="Status" value={status} onChange={(e) => setStatus(e.target.value)}>
+              <option value="">All statuses</option>
+              {STATUSES.map((s) => (
+                <option key={s}>{s}</option>
+              ))}
+            </select>
+          </div>
+
+          {filtered.length === 0 ? (
+            <div className="mt-4">
+              <EmptyState title={all.length ? 'No questions match these filters' : 'No questions yet'}>
+                {all.length ? 'Change or clear the filters.' : 'Import a CSV or JSON file, or load the development sample to try the app.'}
+              </EmptyState>
+            </div>
+          ) : (
+            <ul className="mt-4 space-y-2">
+              {filtered.slice(0, limit).map((q) => (
+                <li key={q.id} className="rounded-lg border border-border bg-surface p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="flex flex-wrap items-center gap-2 text-xs text-muted">
+                        <span className="font-mono">{q.id}</span>
+                        <span>· {q.subject} · {q.topic} · {q.difficulty}</span>
+                        <span className="rounded bg-surface-2 px-1.5 py-0.5 font-medium text-ink">{q.status}</span>
+                        {q.source.kind === 'dev-sample' && <span className="rounded border border-warning px-1.5 py-0.5 font-medium text-warning">DEV SAMPLE</span>}
+                      </p>
+                      <p className="mt-1 text-sm">{q.text}</p>
+                      <p className="mt-1 text-xs text-muted">Answer: {correctAnswerLabel(q)}</p>
+                    </div>
+                    <button type="button" aria-label={`Edit ${q.id}`} onClick={() => setEditing(q)} className="grid h-11 w-11 shrink-0 place-items-center rounded-md hover:bg-surface-2">
+                      <Pencil size={16} aria-hidden />
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+          {filtered.length > limit && (
+            <Button variant="secondary" className="mt-4" onClick={() => setLimit((l) => l + PAGE)}>
+              Show more ({filtered.length - limit} left)
+            </Button>
+          )}
+        </>
+      )}
+      {editing && <QuestionEditDialog question={editing} onClose={() => setEditing(null)} />}
+    </section>
+  )
+}

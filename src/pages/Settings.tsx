@@ -1,6 +1,8 @@
 import { useState, type ChangeEvent } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { Download, Upload } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Database, Download, Upload } from 'lucide-react'
+import { downloadText } from '../download'
 import { Button, Card, Dialog, Skeleton, useToast } from '../components/ui'
 import { EXAMS } from '../data/exams'
 import { describeDbError } from '../db/db'
@@ -40,12 +42,7 @@ function SettingsForm({ prefs, malformed }: { prefs: Prefs; malformed: boolean }
   async function download() {
     try {
       const backup = await exportBackup()
-      const url = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }))
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `smart-exam-coach-backup-${backup.exportedAt.slice(0, 10)}.json`
-      a.click()
-      URL.revokeObjectURL(url)
+      downloadText(`smart-exam-coach-backup-${backup.exportedAt.slice(0, 10)}.json`, JSON.stringify(backup, null, 2))
       toast('Backup downloaded')
     } catch (e) {
       setError(describeDbError(e))
@@ -165,6 +162,19 @@ function SettingsForm({ prefs, malformed }: { prefs: Prefs; malformed: boolean }
             </div>
           </div>
         )}
+      </Card>
+
+      <Card className="mt-4">
+        <h2 className="font-semibold">Question bank</h2>
+        <p className="mt-2 text-sm text-muted">
+          Import, review and export questions (CSV or JSON). This is managed separately from your personal records.
+        </p>
+        <Link
+          to="/question-bank"
+          className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-md border border-border bg-surface px-4 text-sm font-medium hover:bg-surface-2"
+        >
+          <Database size={16} aria-hidden /> Open question bank
+        </Link>
       </Card>
 
       <Dialog open={confirmReplace} onClose={() => setConfirmReplace(false)} title="Replace your data?">

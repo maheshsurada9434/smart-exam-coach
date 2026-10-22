@@ -1,0 +1,3 @@
+id,exam_codes,cycle,subject,topic,subtopic,type,language,question,passage,option_a,option_b,option_c,option_d,option_e,option_f,answer,tolerance,explanation,solution_steps,difficulty,expected_seconds,source_kind,source_label,source_url,source_year,status,image
+EXAMPLE-001,SSC_CGL|SSC_CHSL,,Quantitative Aptitude,Percentage,,mcq,en,"EXAMPLE ROW (replace me): What is 10% of 250?",,20,25,30,35,,,B,,"10% of 250 = 250 × 10 ÷ 100 = 25.",,easy,45,original,Your own question,,,draft,
+EXAMPLE-002,SSC_GD,,Quantitative Aptitude,Simplification,,numerical,en,"EXAMPLE ROW (replace me): Calculate 12 × 11.",,,,,,,,132,0,"12 × 11 = 132.",12 × 10 = 120|120 + 12 = 132,easy,30,original,Your own question,,,draft,

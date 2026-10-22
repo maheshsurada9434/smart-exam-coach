@@ -29,6 +29,7 @@ export class ExamDB extends Dexie {
   declare revisionItems: Table<Row, string>
   declare reviewLogs: Table<Row, string>
   declare importLogs: Table<Row, string>
+  declare questionVersions: Table<Row, string>
 
   constructor(name = DB_NAME) {
     super(name)
@@ -46,6 +47,24 @@ export class ExamDB extends Dexie {
       reviewLogs: 'id, itemId, reviewedAt',
       importLogs: 'id, createdAt',
     })
+    // v2 (Day 3): a question can belong to several exams; content index for duplicate checks;
+    // previous question versions kept for history.
+    this.version(2)
+      .stores({
+        questions: 'id, *examCodes, subject, topic, status, contentKey',
+        questionVersions: 'id, questionId',
+      })
+      .upgrade((tx) =>
+        tx
+          .table('questions')
+          .toCollection()
+          .modify((q: Record<string, unknown>) => {
+            if (!Array.isArray(q.examCodes)) {
+              q.examCodes = typeof q.examCode === 'string' ? [q.examCode] : []
+              delete q.examCode
+            }
+          }),
+      )
   }
 }
 
