@@ -7,7 +7,10 @@ Live: **https://maheshsurada9434.github.io/smart-exam-coach/**
 
 - **No AI anywhere.** No AI/LLM APIs, SDKs or keys. Personalisation uses documented, deterministic rules ([docs/ALGORITHMS.md](docs/ALGORITHMS.md)).
 - **No backend, no accounts, no paid services.** A static site on GitHub Pages; all student data stays in the browser (IndexedDB).
-- **No invented content.** Questions and study content come from files you import. A small development sample is included and labelled **DEV SAMPLE** everywhere.
+- **Honest content.** A starter bank of ~1,700 original practice questions and ~700 study entries is included and labelled
+  "Original practice set by Claude, not expert-reviewed" (maths/reasoning answers are computed by `scripts/`, so they are
+  correct by construction; English/GA were written by hand). No previous-year questions are claimed. Current affairs carry
+  their source link and date. You can import your own reviewed material at any time.
 
 ## Features
 | Area | What it does |
@@ -60,6 +63,12 @@ No secrets or API keys are needed.
 - The database is versioned (now v4) with migrations; it is never cleared on startup and malformed rows are reported, not deleted.
   See [docs/DATA.md](docs/DATA.md).
 
+## Starter material
+**Settings → Open question bank → Load starter bank** (1,685 questions: Quant 410, Reasoning 400, English 481, GA 368,
+Current affairs 26). **Syllabus/Revision → Study content → Load starter pack** (695 entries: 204 words, 105 idioms, 135 one-word
+substitutions, 30 grammar rules, 57 Constitution articles, 138 GA facts, 26 current affairs). Both can be removed again, and
+both work offline once the app has been opened. Enough questions exist for full-length CGL, CHSL, MTS, GD and A&N Tier I mocks.
+
 ## Updating questions and content (no code changes)
 - Questions: **Settings → Open question bank → Import**. Format, rules and template: [docs/QUESTIONS.md](docs/QUESTIONS.md),
   [docs/question-bank.schema.json](docs/question-bank.schema.json), `public/templates/questions-template.csv`.
@@ -71,9 +80,12 @@ Current Chrome, Edge, Firefox and Safari (desktop and mobile) with IndexedDB. Au
 In private/incognito windows storage may be blocked or cleared when the window closes.
 
 ## Known limitations
-- **Exam patterns are not officially verified.** CGL, CHSL, MTS and GD patterns come from published summaries (sources shown in the
-  app) and are marked as such; check them against the notifications on ssc.gov.in. Andaman & Nicobar exams have no pattern yet.
-- **No real question bank is included.** Only 14 development questions and a few development study entries. Real content must be imported.
+- **Exam patterns are not officially verified.** CGL, CHSL, MTS, GD and the A&N Combined Matric Level 2026 Tier I patterns come
+  from published summaries (sources shown in the app) and are marked as such; check them against the official notifications
+  (ssc.gov.in, erecruitment.andamannicobar.gov.in). Other A&N posts use different patterns that are not included.
+- **The starter material is not expert-reviewed.** Questions and study entries were written by Claude (maths/reasoning answers
+  computed by a program). Current affairs come from coaching-site summaries (Sept–Oct 2026), not primary sources, and will date.
+  Telugu meanings are only in the development sample. Rebuild the material with `node scripts/build-starter.mjs`.
 - **Local exams are not tamper-proof.** The timer and answers are stored in the browser; a determined user can alter them. This is
   not a substitute for a server-controlled exam.
 - **No ranks or percentiles**, because there is no comparison group. **No sync** between devices.
