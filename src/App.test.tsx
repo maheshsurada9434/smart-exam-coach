@@ -22,9 +22,9 @@ describe('App shell', () => {
   })
 
   it('shows an honest not-built notice on unbuilt sections', async () => {
-    renderAt('/mock-tests')
-    expect(await screen.findByRole('heading', { name: 'Mock Tests', level: 1 })).toBeInTheDocument()
-    expect(screen.getByText(/planned for Day 5/)).toBeInTheDocument()
+    renderAt('/planner')
+    expect(await screen.findByRole('heading', { name: 'Study Planner', level: 1 })).toBeInTheDocument()
+    expect(screen.getByText(/planned for Day 6/)).toBeInTheDocument()
   })
 
   it('toggles dark mode and remembers it', async () => {

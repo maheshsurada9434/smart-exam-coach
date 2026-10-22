@@ -8,6 +8,7 @@ const Dashboard = lazy(() => import('./pages/Dashboard'))
 const Planned = lazy(() => import('./pages/Planned'))
 const QuestionBank = lazy(() => import('./pages/QuestionBank'))
 const PracticeSession = lazy(() => import('./pages/PracticeSession'))
+const MockRun = lazy(() => import('./pages/MockRun'))
 
 // Sections that are built; every other NAV entry shows the honest "not built yet" page.
 const BUILT: Record<string, LazyExoticComponent<ComponentType>> = {
@@ -15,6 +16,7 @@ const BUILT: Record<string, LazyExoticComponent<ComponentType>> = {
   '/settings': lazy(() => import('./pages/Settings')),
   '/practice': lazy(() => import('./pages/Practice')),
   '/bookmarks': lazy(() => import('./pages/Bookmarks')),
+  '/mock-tests': lazy(() => import('./pages/MockTests')),
 }
 
 const Loading = () => (
@@ -37,6 +39,7 @@ export default function App() {
           })}
           <Route path="question-bank" element={<QuestionBank />} />
           <Route path="practice/session/:id" element={<PracticeSession />} />
+          <Route path="mock-tests/run/:id" element={<MockRun />} />
           <Route path="*" element={<Planned path="*" />} />
         </Route>
       </Routes>
