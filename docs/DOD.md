@@ -33,9 +33,15 @@ Development happened in a session that could not reach npm, so **every check bel
 - Bundle (gzip): **≈275 KB JavaScript, 4.6 KB CSS**. The charts library is only loaded on the Performance screen (≈107 KB).
 - Accessibility: axe-core finds no serious or critical WCAG 2.1 A/AA violations on 11 screens in light and dark mode.
 
+## Update 2026-10-22 (Days 9–10)
+- Starter material added and validated in CI (every item passes the app schema; full-length mocks build for every exam).
+- Design pass (ui-ux-pro-max): display + text fonts bundled for offline use, Today card with progress ring, count-ups on real numbers,
+  staggered entrances, hover lift, answer reveal, timer announcements at 5 and 1 minutes. Re-checked: e2e 8/8, axe light + dark,
+  320/375 px overflow, reduced motion, live smoke. Bundle now ≈278 KB JS + 5.9 KB CSS gzipped (plus fonts).
+
 ## Not done / not verified
 - Exam patterns are not checked against official notification PDFs (marked *secondary* in the app). Andaman patterns missing.
-- No real question bank or reviewed content packs (only labelled development samples).
+- Starter questions and content (1,685 + 695) are written by Claude and not expert-reviewed; current affairs come from secondary sources.
 - Manual testing on physical phones, screen readers and Safari/Firefox was not performed (automated tests use Chromium).
 - App installability (PWA install prompt) was not tested; offline mode was.
 - React Hook Form was not used (forms are small); Zod is used for all validation.
