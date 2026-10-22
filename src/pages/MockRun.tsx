@@ -87,12 +87,34 @@ function ExamScreen({ s, questions }: { s: MockSession; questions: Question[] })
     shownAt.current = Date.now()
     return ms
   }
-  const answer = (r: Response) =>
-    saveMockAnswer(s.id, q.id, r, spent()).then((ok) => !ok && toast('This test has ended; the answer was not saved.'), (e) => toast(describeDbError(e)))
+  // Show the choice at once; the stored answer catches up a moment later. A rejected save is rolled back.
+  const [shown, setShown] = useState<Record<string, Response>>({})
+  const responseOf = (id: string): Response => (id in shown ? (shown[id] as Response) : (s.answers[id]?.response ?? null))
+  const forget = (id: string) =>
+    setShown((x) => {
+      const copy = { ...x }
+      delete copy[id]
+      return copy
+    })
+  const answer = (r: Response) => {
+    const id = q.id
+    setShown((x) => ({ ...x, [id]: r }))
+    saveMockAnswer(s.id, id, r, spent()).then(
+      (ok) => {
+        if (ok) return
+        forget(id)
+        toast('This test has ended; the answer was not saved.')
+      },
+      (e) => {
+        forget(id)
+        toast(describeDbError(e))
+      },
+    )
+  }
   const go = (i: number) => updateMockNav(s.id, { currentIndex: Math.max(0, Math.min(questions.length - 1, i)) })
-  const response = s.answers[q.id]?.response ?? null
+  const response = responseOf(q.id)
   const ids = allIds(s)
-  const states = questions.map((x) => questionState(s.answers[x.id]?.response != null, !!s.visited[x.id], !!s.marked[x.id]))
+  const states = questions.map((x) => questionState(responseOf(x.id) !== null, !!s.visited[x.id], !!s.marked[x.id]))
   const count = (st: QState) => states.filter((x) => x === st).length
   const answered = count('answered') + count('answered-marked')
   const sectionOf = (qid: string) => s.sections.find((x) => x.questionIds.includes(qid))
