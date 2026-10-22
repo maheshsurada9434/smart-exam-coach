@@ -44,10 +44,10 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - [x] Day 5 checks pass, committed
 
 ## Day 6: Algorithms
-- [~] Mastery + recommendations (written, waiting for CI)
-- [~] Study planner (written, waiting for CI)
-- [~] SM-2 revision + sessions (written, waiting for CI)
-- [ ] Day 6 tests + checks pass, committed
+- [x] Mastery + recommendations
+- [x] Study planner
+- [x] SM-2 revision + sessions
+- [x] Day 6 tests + checks pass, committed
 
 ## Day 7: Dashboard + content
 - [ ] Dashboard (real data)
@@ -79,3 +79,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: Day 5 code written: pure scoring (per-section, fractional, round2), buildMock from exam pattern (approved/published only, partial flag + scaled time), deadline-based saves, auto-submit, idempotent submit with frozen result, palette with 5 states, results by section/topic + review, history. Pushed; waiting for CI.
 - 2026-10-22: DAY 5 DONE. CI green after 2 fixes (TS duplicate-key in asMock; Dialog fallback when showModal missing). Tests cover all spec-12 cases: all correct/incorrect/unanswered, mixed, fractional, section marking, timeout, refresh, interrupted, duplicate submit, frozen score. Limitation: local timer/storage is not tamper-proof. Sectional time is proportional (not official). Next: Day 6 mastery, planner, SM-2.
 - 2026-10-22: Day 6 code written: dates, mastery labels (docs/ALGORITHMS.md), SM-2, recommendations with reasons, budget-capped planner (day/week, edit, reorder, skip, done+actual, reschedule, manual tasks), Revision (MCQ recall + flashcards, summary), Settings study days + exam date. Practice weak mode now uses mastery. Pushed; waiting for CI.
+- 2026-10-22: DAY 6 DONE. CI run 39768019808 green first try (dates, mastery, SM-2, recommendations order, planner budget cap, regenerate keeps user work, reschedule, Revision + Planner screens). Exam relevance not weighted (patterns unverified). Next: Day 7 dashboard, analytics, vocabulary, current affairs/polity.
