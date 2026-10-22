@@ -21,10 +21,9 @@ describe('App shell', () => {
     for (const n of NAV) expect(within(sidebar).getByRole('link', { name: n.label })).toBeInTheDocument()
   })
 
-  it('shows an honest not-built notice on unbuilt sections', async () => {
-    renderAt('/performance')
-    expect(await screen.findByRole('heading', { name: 'Performance', level: 1 })).toBeInTheDocument()
-    expect(screen.getByText(/planned for Day 7/)).toBeInTheDocument()
+  it('shows a not-found page for unknown addresses', async () => {
+    renderAt('/no-such-page')
+    expect(await screen.findByText('Page not found')).toBeInTheDocument()
   })
 
   it('toggles dark mode and remembers it', async () => {

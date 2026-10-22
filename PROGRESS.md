@@ -50,8 +50,8 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - [x] Day 6 tests + checks pass, committed
 
 ## Day 7: Dashboard + content
-- [ ] Dashboard (real data)
-- [ ] Performance analytics
+- [~] Dashboard (real data) (written, waiting for CI)
+- [~] Performance analytics (written, waiting for CI)
 - [ ] Vocabulary module
 - [ ] Current Affairs + Polity framework
 - [ ] Day 7 checks pass, committed
@@ -80,3 +80,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: DAY 5 DONE. CI green after 2 fixes (TS duplicate-key in asMock; Dialog fallback when showModal missing). Tests cover all spec-12 cases: all correct/incorrect/unanswered, mixed, fractional, section marking, timeout, refresh, interrupted, duplicate submit, frozen score. Limitation: local timer/storage is not tamper-proof. Sectional time is proportional (not official). Next: Day 6 mastery, planner, SM-2.
 - 2026-10-22: Day 6 code written: dates, mastery labels (docs/ALGORITHMS.md), SM-2, recommendations with reasons, budget-capped planner (day/week, edit, reorder, skip, done+actual, reschedule, manual tasks), Revision (MCQ recall + flashcards, summary), Settings study days + exam date. Practice weak mode now uses mastery. Pushed; waiting for CI.
 - 2026-10-22: DAY 6 DONE. CI run 39768019808 green first try (dates, mastery, SM-2, recommendations order, planner budget cap, regenerate keeps user work, reschedule, Revision + Planner screens). Exam relevance not weighted (patterns unverified). Next: Day 7 dashboard, analytics, vocabulary, current affairs/polity.
+- 2026-10-22: Day 7A written: analytics/stats (filters, groups, daily/weekly, trend, repeated errors, coverage), dashboard from real data + onboarding, Performance page with Recharts + text summaries + CSV export. Recharts 2.15.0 added (lockfile via CI). Next: 7B content module.
