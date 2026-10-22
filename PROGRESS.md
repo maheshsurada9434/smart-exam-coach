@@ -25,10 +25,10 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - [x] Day 2 tests + checks pass, committed
 
 ## Day 3: Question bank + import
-- [~] Zod schema + JSON schema doc + validation + duplicates (written, waiting for CI)
-- [~] CSV import wizard (written, waiting for CI)
-- [~] CSV/JSON export + DEV sample dataset (written, waiting for CI)
-- [ ] Day 3 tests + checks pass, committed
+- [x] Zod schema + JSON schema doc + validation + duplicates
+- [x] CSV import wizard
+- [x] CSV/JSON export + DEV sample dataset
+- [x] Day 3 tests + checks pass, committed
 
 ## Day 4: Practice engine
 - [ ] Question selection (all modes)
@@ -73,3 +73,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: Day 2 code written (Dexie db, prefs, backup, exams data from secondary sources, Syllabus + Settings screens, tests). Pushed; waiting for CI.
 - 2026-10-22: DAY 2 DONE. CI run 39762388649 green (lint, typecheck, unit + screen tests, build, deploy). Fixed: settings form race on load, toasts moved inside App. Exam patterns are 'secondary' (coaching-site summaries), not checked against ssc.gov.in PDFs; Andaman has no pattern. React Hook Form not used (2 fields). Next: Day 3 question bank + CSV import.
 - 2026-10-22: Day 3 code written: question schema + lifecycle, DB v2 migration, CSV parser, import preview/commit, edit with version history, CSV/JSON export, 14-question DEV sample, docs/QUESTIONS.md + JSON schema. Pushed; waiting for CI.
+- 2026-10-22: DAY 3 DONE. CI run 39763769384 green (lint, typecheck, all tests incl. v1->v2 migration, import/duplicates/versioning, build, deploy). Not built: student error reports (moved to Day 4 with the practice screen), CSV formula-injection escaping. Next: Day 4 practice engine.
