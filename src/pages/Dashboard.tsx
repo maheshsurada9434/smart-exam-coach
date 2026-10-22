@@ -23,7 +23,7 @@ export default function Dashboard() {
 function Onboarding({ data }: { data: Overview }) {
   const steps: [string, string, string, boolean][] = [
     ['Choose your exam', 'Pick SSC CGL, CHSL, MTS, GD or an Andaman exam and your daily study time.', '/settings', !!data.prefs.examCode],
-    ['Add questions', 'Import a question file, or load the clearly labelled development sample to try the app.', '/question-bank', data.questionCount > 0],
+    ['Add questions', 'Load the starter question bank (about 1,700 original practice questions) or import your own file.', '/question-bank', data.questionCount > 0],
     ['Start practising', 'Every attempt builds your real performance record. Statistics appear here after that.', '/practice', false],
   ]
   return (

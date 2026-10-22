@@ -90,8 +90,16 @@ const System = z.object({
 export const QuestionSchema = QuestionInputSchema.and(System)
 export type Question = QuestionInput & z.output<typeof System>
 
+/**
+ * For duplicate checks: ignores case, spacing and sentence punctuation, but keeps maths symbols,
+ * signs and decimal points, so "−1" ≠ "1" and "x + 1/x" ≠ "x − 1/x".
+ */
 export function normalize(s: string) {
-  return s.normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim()
+  return s
+    .normalize('NFKC')
+    .toLowerCase()
+    .replace(/[\s"'‘’“”!?,;:]+/g, '')
+    .replace(/\.(?!\d)|(?<!\d)\./g, '')
 }
 
 /** Same text + same answer choices + same language = duplicate content, whatever the ID. */

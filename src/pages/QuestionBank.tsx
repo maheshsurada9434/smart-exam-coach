@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { Download, FlaskConical, Pencil, Trash2 } from 'lucide-react'
+import { Download, FlaskConical, Library, Pencil, Trash2 } from 'lucide-react'
 import { Button, Card, EmptyState, Skeleton, useToast } from '../components/ui'
 import QuestionImport from '../components/QuestionImport'
 import QuestionEditDialog from '../components/QuestionEditDialog'
@@ -8,7 +8,7 @@ import { EXAMS, SUBJECTS } from '../data/exams'
 import { db, describeDbError } from '../db/db'
 import { downloadText } from '../download'
 import { questionsToCsv } from '../questions/csv'
-import { loadDevSample, loadQuestions, questionsToJson, removeDevSample } from '../questions/repo'
+import { STARTER_PREFIX, loadDevSample, loadQuestions, loadStarterQuestions, questionsToJson, removeDevSample, removeStarterQuestions } from '../questions/repo'
 import { STATUSES, correctAnswerLabel, normalize, type Question } from '../questions/schema'
 
 const select = 'min-h-11 rounded-md border border-border bg-surface px-3 text-sm'
@@ -42,11 +42,16 @@ export default function QuestionBank() {
   }, [all, exam, subject, status, search])
 
   const hasDev = all.some((q) => q.source.kind === 'dev-sample')
+  const starterCount = all.filter((q) => q.id.startsWith(STARTER_PREFIX)).length
+  const [busy, setBusy] = useState(false)
   const run = async (fn: () => Promise<string>) => {
+    setBusy(true)
     try {
       toast(await fn())
     } catch (e) {
-      toast(describeDbError(e))
+      toast(e instanceof Error && e.message.startsWith('Could not download') ? e.message : describeDbError(e))
+    } finally {
+      setBusy(false)
     }
   }
   const stamp = () => new Date().toISOString().slice(0, 10)
@@ -76,6 +81,38 @@ export default function QuestionBank() {
               </span>
             )}
           </div>
+
+          <Card className="mt-4 flex flex-wrap items-center justify-between gap-4 border-accent">
+            <div className="flex max-w-2xl gap-3">
+              <Library size={22} className="mt-0.5 shrink-0 text-accent" aria-hidden />
+              <div>
+                <h2 className="font-semibold">Starter question bank</h2>
+                <p className="mt-1 text-sm text-muted">
+                  About 1,700 original practice questions for all four subjects, enough for full-length CGL, CHSL, MTS, GD and A&amp;N mocks.
+                  Maths and reasoning answers are computed by a program; English and GA were written by Claude. Not previous-year questions
+                  and not expert-reviewed. Current-affairs questions show their news source.
+                </p>
+                {starterCount > 0 && <p className="mt-1 text-sm font-medium text-success">{starterCount} starter questions loaded</p>}
+              </div>
+            </div>
+            {starterCount > 0 ? (
+              <Button variant="ghost" disabled={busy} onClick={() => run(async () => `Removed ${await removeStarterQuestions()} starter questions`)}>
+                <Trash2 size={16} aria-hidden /> Remove starter bank
+              </Button>
+            ) : (
+              <Button
+                disabled={busy}
+                onClick={() =>
+                  run(async () => {
+                    const r = await loadStarterQuestions()
+                    return `Added ${r.added} questions${r.rejected ? `, ${r.rejected} skipped as duplicates` : ''}`
+                  })
+                }
+              >
+                <Library size={16} aria-hidden /> {busy ? 'Loading…' : 'Load starter bank'}
+              </Button>
+            )}
+          </Card>
 
           <div className="mt-4 grid gap-4 lg:grid-cols-2">
             <QuestionImport />
