@@ -3,11 +3,12 @@
 All student data is stored in the browser's IndexedDB (database `smart-exam-coach`), via Dexie.
 It is not encrypted and not synced. Clearing site data or losing the device deletes it unless a backup was downloaded.
 
-## Tables (schema version 1)
+## Tables (schema version 2)
 | Table | Key | Indexes | Holds |
 |---|---|---|---|
 | prefs | id (`"prefs"`) | | exam, minutes per day, study days, target date |
-| questions | id | examCode, subject, topic, status | question bank (Day 3) |
+| questions | id | *examCodes (multi), subject, topic, status, contentKey | question bank, see QUESTIONS.md |
+| questionVersions | id (`<qid>@v<n>`) | questionId | earlier versions of each question |
 | attempts | id | questionId, sessionId, examCode, topic, createdAt | every answered question |
 | sessions | id | kind, examCode, status, startedAt | practice and mock sessions |
 | bookmarks | id (question id) | createdAt | bookmarked questions |
@@ -18,6 +19,7 @@ It is not encrypted and not synced. Clearing site data or losing the device dele
 | importLogs | id | createdAt | question import reports |
 
 ## Migrations
+- v1 → v2: `questions.examCode` (string) became `examCodes` (array); added `contentKey` index and `questionVersions` table.
 Released versions are never edited. A change adds `version(N+1).stores({...}).upgrade(tx => ...)` in `src/db/db.ts`.
 The app never clears the database on startup. A malformed row is reported, not deleted.
 

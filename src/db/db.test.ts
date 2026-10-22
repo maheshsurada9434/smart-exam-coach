@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
+import Dexie from 'dexie'
 import { DB_NAME, ExamDB, db, describeDbError } from './db'
 import { DEFAULT_PREFS, getPrefs, savePrefs } from './prefs'
 import { exportBackup, parseBackup, restoreBackup } from './backup'
@@ -9,8 +10,8 @@ beforeEach(async () => {
 })
 
 describe('database', () => {
-  it('opens empty with schema version 1 and default prefs', async () => {
-    expect(db.verno).toBe(1)
+  it('opens empty with the latest schema version and default prefs', async () => {
+    expect(db.verno).toBe(2)
     expect(await db.attempts.count()).toBe(0)
     expect(await getPrefs()).toEqual({ prefs: DEFAULT_PREFS, malformed: false })
   })
@@ -23,6 +24,26 @@ describe('database', () => {
     expect(await again.attempts.get('a1')).toEqual({ id: 'a1', questionId: 'q1' })
     again.close()
     await db.open()
+  })
+
+  it('migrates v1 questions (examCode) to v2 (examCodes) without losing rows', async () => {
+    const name = 'migration-test'
+    await Dexie.delete(name)
+    const v1 = new Dexie(name)
+    v1.version(1).stores({ questions: 'id, examCode, subject, topic, status', attempts: 'id' })
+    await v1.open()
+    await v1.table('questions').add({ id: 'q1', examCode: 'SSC_CGL', text: 'x' })
+    await v1.table('attempts').add({ id: 'a1' })
+    v1.close()
+
+    const v2 = new ExamDB(name)
+    await v2.open()
+    expect(v2.verno).toBe(2)
+    expect(await v2.questions.get('q1')).toEqual({ id: 'q1', examCodes: ['SSC_CGL'], text: 'x' })
+    expect(await v2.attempts.get('a1')).toEqual({ id: 'a1' })
+    expect(await v2.questions.where('examCodes').equals('SSC_CGL').count()).toBe(1)
+    v2.close()
+    await Dexie.delete(name)
   })
 
   it('reports malformed prefs without deleting them', async () => {

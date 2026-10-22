@@ -25,9 +25,9 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - [x] Day 2 tests + checks pass, committed
 
 ## Day 3: Question bank + import
-- [ ] Zod schema + JSON schema doc + validation + duplicates
-- [ ] CSV import wizard
-- [ ] CSV/JSON export + DEV sample dataset
+- [~] Zod schema + JSON schema doc + validation + duplicates (written, waiting for CI)
+- [~] CSV import wizard (written, waiting for CI)
+- [~] CSV/JSON export + DEV sample dataset (written, waiting for CI)
 - [ ] Day 3 tests + checks pass, committed
 
 ## Day 4: Practice engine
@@ -72,3 +72,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: DAY 1 DONE. CI run 39760679069: install, lint, typecheck, 3 unit tests, build, Pages deploy all green. package-lock.json committed by CI (next runs use npm ci). Live URL https://maheshsurada9434.github.io/smart-exam-coach/ serves title 'Smart Exam Coach'. NOT verified: assets/JS in a real browser, mobile visuals (this session cannot reach github.io from a browser). Next: Day 2.
 - 2026-10-22: Day 2 code written (Dexie db, prefs, backup, exams data from secondary sources, Syllabus + Settings screens, tests). Pushed; waiting for CI.
 - 2026-10-22: DAY 2 DONE. CI run 39762388649 green (lint, typecheck, unit + screen tests, build, deploy). Fixed: settings form race on load, toasts moved inside App. Exam patterns are 'secondary' (coaching-site summaries), not checked against ssc.gov.in PDFs; Andaman has no pattern. React Hook Form not used (2 fields). Next: Day 3 question bank + CSV import.
+- 2026-10-22: Day 3 code written: question schema + lifecycle, DB v2 migration, CSV parser, import preview/commit, edit with version history, CSV/JSON export, 14-question DEV sample, docs/QUESTIONS.md + JSON schema. Pushed; waiting for CI.

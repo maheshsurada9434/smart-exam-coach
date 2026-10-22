@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "smart-exam-coach/question-bank.schema.json",
+  "title": "Smart Exam Coach question bank (format version 1)",
+  "description": "The source of truth is src/questions/schema.ts (Zod). A test keeps this file's enums and required fields in sync.",
+  "type": "object",
+  "required": ["format", "version", "questions"],
+  "properties": {
+    "format": { "const": "smart-exam-coach-questions" },
+    "version": { "const": 1 },
+    "exportedAt": { "type": "string" },
+    "questions": { "type": "array", "items": { "$ref": "#/$defs/question" } }
+  },
+  "$defs": {
+    "question": {
+      "type": "object",
+      "required": ["id", "examCodes", "subject", "topic", "type", "text", "difficulty", "source", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z0-9_.-]{1,64}$" },
+        "examCodes": { "type": "array", "minItems": 1, "items": { "enum": ["SSC_CGL", "SSC_CHSL", "SSC_MTS", "SSC_GD", "ANI"] } },
+        "cycle": { "type": "string" },
+        "subject": { "enum": ["Quantitative Aptitude", "Reasoning", "English", "General Awareness"] },
+        "topic": { "type": "string", "minLength": 1 },
+        "subtopic": { "type": "string" },
+        "type": { "enum": ["mcq", "numerical"] },
+        "language": { "type": "string", "default": "en" },
+        "text": { "type": "string", "minLength": 1 },
+        "passage": { "type": "string" },
+        "image": { "type": "string" },
+        "options": { "type": "array", "minItems": 2, "maxItems": 6, "items": { "type": "string", "minLength": 1 } },
+        "correctOption": { "type": "integer", "minimum": 0, "description": "0-based index into options (mcq)" },
+        "correctValue": { "type": "number", "description": "numerical answer" },
+        "tolerance": { "type": "number", "minimum": 0, "default": 0 },
+        "explanation": { "type": "string", "default": "" },
+        "solutionSteps": { "type": "array", "items": { "type": "string" } },
+        "difficulty": { "enum": ["easy", "medium", "hard"] },
+        "expectedSeconds": { "type": "integer", "minimum": 1 },
+        "source": {
+          "type": "object",
+          "required": ["kind"],
+          "properties": {
+            "kind": { "enum": ["original", "previous-year", "licensed", "dev-sample"] },
+            "label": { "type": "string" },
+            "url": { "type": "string", "format": "uri" },
+            "year": { "type": "integer", "minimum": 1950, "maximum": 2100 }
+          }
+        },
+        "status": { "enum": ["draft", "reviewed", "approved", "published", "archived"] }
+      },
+      "allOf": [
+        { "if": { "properties": { "type": { "const": "mcq" } } }, "then": { "required": ["options", "correctOption"] } },
+        { "if": { "properties": { "type": { "const": "numerical" } } }, "then": { "required": ["correctValue"] } }
+      ]
+    }
+  }
+}
