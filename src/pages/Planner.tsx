@@ -32,7 +32,7 @@ const TYPE_LABEL: Record<TaskType, string> = {
   vocabulary: 'Vocabulary',
   mock: 'Mock test',
 }
-const field = 'min-h-11 rounded-md border border-border bg-surface px-3 text-sm'
+const field = 'min-h-11 max-w-full rounded-md border border-border bg-surface px-3 text-sm'
 
 function taskLink(t: Task) {
   const q = (o: Record<string, string | undefined>) =>

@@ -32,7 +32,7 @@ const TABS: { id: string; label: string; kinds: ContentKind[] }[] = [
   { id: 'ca', label: 'Current affairs', kinds: ['current-affairs'] },
   { id: 'ga', label: 'GA facts', kinds: ['ga-fact'] },
 ]
-const field = 'min-h-11 rounded-md border border-border bg-surface px-3 text-sm'
+const field = 'min-h-11 max-w-full rounded-md border border-border bg-surface px-3 text-sm'
 
 export default function Content() {
   const toast = useToast()

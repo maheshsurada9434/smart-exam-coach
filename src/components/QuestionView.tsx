@@ -48,11 +48,12 @@ export default function QuestionView({ q, response, onChange, locked, reveal }: 
                   onChange={() => onChange?.(i)}
                 />
                 <span
+                  aria-hidden
                   className={`grid h-7 w-7 shrink-0 place-items-center rounded-full border text-xs font-semibold transition-colors duration-fast ${chosen ? 'border-accent bg-accent text-accent-ink' : 'border-border bg-surface-2'}`}
                 >
                   {OPTION_LETTERS[i]}
-                  <span className="sr-only">.</span>
                 </span>
+                <span className="sr-only">{OPTION_LETTERS[i]}.</span>
                 <span className="flex-1">{opt}</span>
                 {isAnswer && (
                   <span className="inline-flex items-center gap-1 text-xs font-semibold text-success">

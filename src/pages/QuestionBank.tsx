@@ -12,7 +12,7 @@ import { STARTER_PREFIX, loadDevSample, loadQuestions, loadStarterQuestions, que
 import { STATUSES, correctAnswerLabel, normalize, type Question } from '../questions/schema'
 import { staggerStyle } from '../components/motion'
 
-const select = 'min-h-11 rounded-md border border-border bg-surface px-3 text-sm'
+const select = 'min-h-11 max-w-full rounded-md border border-border bg-surface px-3 text-sm'
 const PAGE = 50
 
 export default function QuestionBank() {
