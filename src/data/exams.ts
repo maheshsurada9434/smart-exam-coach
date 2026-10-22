@@ -157,7 +157,7 @@ export const EXAMS: Exam[] = [
   },
   {
     code: 'ANI',
-    name: 'A&N Administration: Combined Matric Level (Group C)',
+    name: 'A&N Matric Level (Group C)',
     family: 'ANI',
     patternVersion: 'Advt. No. 01/ML/2026',
     verification: 'secondary',

@@ -10,7 +10,7 @@ import { LABEL_TEXT } from '../learning/mastery'
 import { loadOverview, syllabusTopics, type Overview } from '../analytics/load'
 import { RANGE_LABEL, coverage, filterAttempts, minutes, pct, rangeStart, summary, type Range } from '../analytics/stats'
 
-const field = 'min-h-11 rounded-md border border-border bg-surface px-3 text-sm'
+const field = 'min-h-11 max-w-full rounded-md border border-border bg-surface px-3 text-sm'
 const linkBtn = 'inline-flex min-h-11 items-center gap-2 rounded-md px-4 text-sm font-medium'
 
 export default function Dashboard() {

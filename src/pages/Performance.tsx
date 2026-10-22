@@ -28,7 +28,7 @@ import {
   type Range,
 } from '../analytics/stats'
 
-const field = 'min-h-11 rounded-md border border-border bg-surface px-3 text-sm'
+const field = 'min-h-11 max-w-full rounded-md border border-border bg-surface px-3 text-sm'
 const reducedMotion = () => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 const axis = { stroke: 'var(--color-muted)', fontSize: 12 }
 
