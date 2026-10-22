@@ -218,7 +218,7 @@ function ReviewCard({
             {q.explanation && <p className="mt-2 text-sm">{q.explanation}</p>}
           </>
         ) : (
-          <QuestionView q={q} response={response} onChange={setResponse} locked={revealed} reveal={revealed} />
+          <QuestionView q={q} response={response} onChange={setResponse} locked={revealed} reveal={revealed} celebrate />
         )}
 
         <div className="mt-4 flex flex-wrap gap-2">

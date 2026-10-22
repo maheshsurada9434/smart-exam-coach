@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { flushSync } from 'react-dom'
+import { prefersReducedMotion } from './components/motion'
 
 export type Theme = 'light' | 'dark'
 const KEY = 'sec-theme'
@@ -28,5 +30,19 @@ export function useTheme() {
       /* ignore */
     }
   }, [theme])
-  return { theme, toggle: () => setTheme((t) => (t === 'dark' ? 'light' : 'dark')) }
+  // Where the browser supports View Transitions, the new theme grows as a circle from the button.
+  const toggle = (at?: { clientX: number; clientY: number }) => {
+    const next: Theme = theme === 'dark' ? 'light' : 'dark'
+    const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown }
+    if (!doc.startViewTransition || prefersReducedMotion()) return setTheme(next)
+    if (at) {
+      document.documentElement.style.setProperty('--vt-x', `${at.clientX}px`)
+      document.documentElement.style.setProperty('--vt-y', `${at.clientY}px`)
+    }
+    doc.startViewTransition(() => {
+      flushSync(() => setTheme(next))
+      applyTheme(next)
+    })
+  }
+  return { theme, toggle }
 }

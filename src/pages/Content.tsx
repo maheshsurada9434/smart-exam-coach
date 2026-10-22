@@ -1,3 +1,4 @@
+import { burst } from '../components/fx'
 import { staggerStyle } from '../components/motion'
 import { useMemo, useState, type ChangeEvent } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -244,9 +245,12 @@ function Quiz({ kind, pool, onClose }: { kind: ContentKind; pool: ContentItem[];
                   key={o}
                   type="button"
                   disabled={!!picked}
-                  onClick={() => {
+                  onClick={(e) => {
                     setPicked(o)
-                    if (o === q.c.back) setScore((s) => s + 1)
+                    if (o === q.c.back) {
+                      setScore((s) => s + 1)
+                      burst(e.currentTarget)
+                    }
                   }}
                   className={`flex min-h-11 w-full items-center justify-between rounded-md border px-3 text-left text-sm ${right ? 'border-success' : wrong ? 'border-danger' : 'border-border'}`}
                 >

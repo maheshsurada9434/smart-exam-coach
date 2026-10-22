@@ -12,6 +12,7 @@ export default {
         ink: 'var(--color-ink)',
         muted: 'var(--color-muted)',
         accent: 'var(--color-accent)',
+        'accent-2': 'var(--color-accent-2)',
         'accent-ink': 'var(--color-accent-ink)',
         'accent-soft': 'var(--color-accent-soft)',
         danger: 'var(--color-danger)',

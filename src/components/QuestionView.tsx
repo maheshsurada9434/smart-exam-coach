@@ -1,4 +1,6 @@
+import { useEffect, useRef, useState } from 'react'
 import { Check, X } from 'lucide-react'
+import { burst } from './fx'
 import { MISSING_EXPLANATION, isCorrect, type Response } from '../practice/engine'
 import { OPTION_LETTERS, type Question } from '../questions/schema'
 
@@ -8,12 +10,25 @@ type Props = {
   onChange?: (r: Response) => void
   locked?: boolean
   reveal?: boolean // show correct answer + explanation
+  /** Play feedback (confetti / shake) when the answer is revealed live. Never used in mock tests. */
+  celebrate?: boolean
 }
 
-export default function QuestionView({ q, response, onChange, locked, reveal }: Props) {
+export default function QuestionView({ q, response, onChange, locked, reveal, celebrate }: Props) {
   const correct = reveal && isCorrect(q, response)
+  const root = useRef<HTMLDivElement>(null)
+  const wasRevealed = useRef(reveal)
+  const [shake, setShake] = useState(false)
+  // Only the moment of revealing triggers feedback, not opening an already-answered question.
+  useEffect(() => {
+    if (celebrate && reveal && !wasRevealed.current && response !== null) {
+      if (isCorrect(q, response)) burst(root.current?.querySelector('[data-chosen="true"]') ?? root.current)
+      else setShake(true)
+    }
+    wasRevealed.current = reveal
+  }, [reveal, celebrate, q, response])
   return (
-    <div>
+    <div ref={root}>
       {q.source.kind === 'dev-sample' && (
         <p className="mb-2 inline-block rounded border border-warning px-1.5 py-0.5 text-xs font-medium text-warning">DEV SAMPLE</p>
       )}
@@ -34,10 +49,13 @@ export default function QuestionView({ q, response, onChange, locked, reveal }: 
             return (
               <label
                 key={i}
+                data-chosen={chosen}
+                onAnimationEnd={() => setShake(false)}
                 className={[
                   'relative flex min-h-12 cursor-pointer items-center gap-3 rounded-md border px-4 py-2 text-[15px] transition-colors duration-fast focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[var(--color-focus)]',
                   isAnswer ? 'border-success bg-surface' : wrongChoice ? 'border-danger bg-surface' : chosen ? 'border-accent bg-accent-soft' : 'border-border bg-surface hover:bg-surface-2',
                   locked ? 'cursor-default' : '',
+                  shake && wrongChoice ? 'animate-shake' : '',
                 ].join(' ')}
               >
                 <input

@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { installPointerFx } from './components/fx'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { GraduationCap, Menu, Moon, Sun } from 'lucide-react'
 import { NAV } from './nav'
@@ -15,7 +16,7 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
 
 const Brand = () => (
   <span className="flex items-center gap-2">
-    <span className="grid h-8 w-8 place-items-center rounded-lg bg-accent text-accent-ink shadow-card">
+    <span className="btn-primary grid h-8 w-8 place-items-center rounded-lg bg-accent text-accent-ink">
       <GraduationCap size={18} aria-hidden />
     </span>
     <span className="font-display text-[17px] font-semibold tracking-tight">Smart Exam Coach</span>
@@ -26,11 +27,20 @@ export default function Layout() {
   const { theme, toggle } = useTheme()
   const [moreOpen, setMoreOpen] = useState(false)
   const { pathname } = useLocation()
+  // Practice and mock sessions keep the background still, so nothing moves during a test.
+  const calm = /\/(session|run)\//.test(pathname)
+  useEffect(() => installPointerFx(), [])
   const ThemeIcon = theme === 'dark' ? Sun : Moon
   const themeLabel = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
 
   return (
     <div className="min-h-dvh md:flex">
+      <div className="aurora" data-calm={calm} aria-hidden>
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-toast focus:rounded-md focus:bg-surface focus:px-3 focus:py-2"
@@ -39,7 +49,7 @@ export default function Layout() {
       </a>
 
       {/* Desktop sidebar */}
-      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-border bg-surface md:flex">
+      <aside className="glass sticky top-0 hidden h-dvh w-64 shrink-0 flex-col rounded-none border-y-0 border-l-0 md:flex">
         <div className="px-5 py-5">
           <Brand />
         </div>
@@ -52,7 +62,7 @@ export default function Layout() {
           ))}
         </nav>
         <div className="border-t border-border p-3">
-          <button type="button" onClick={toggle} className={linkClass({ isActive: false }) + ' w-full'}>
+          <button type="button" onClick={(e) => toggle(e)} className={linkClass({ isActive: false }) + ' w-full'}>
             <ThemeIcon size={18} aria-hidden />
             {themeLabel}
           </button>
@@ -61,11 +71,11 @@ export default function Layout() {
 
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Mobile top bar */}
-        <header className="sticky top-0 z-nav flex items-center justify-between border-b border-border bg-surface px-4 py-2 md:hidden">
+        <header className="glass sticky top-0 z-nav flex items-center justify-between rounded-none border-x-0 border-t-0 px-4 py-2 md:hidden">
           <Brand />
           <button
             type="button"
-            onClick={toggle}
+            onClick={(e) => toggle(e)}
             aria-label={themeLabel}
             className="grid h-11 w-11 place-items-center rounded-md hover:bg-surface-2"
           >
@@ -81,7 +91,7 @@ export default function Layout() {
       {/* Mobile bottom nav */}
       <nav
         aria-label="Main"
-        className="pb-safe fixed inset-x-0 bottom-0 z-nav grid grid-cols-5 border-t border-border bg-surface md:hidden"
+        className="glass pb-safe fixed inset-x-0 bottom-0 z-nav grid grid-cols-5 rounded-none border-x-0 border-b-0 md:hidden"
       >
         {NAV.filter((n) => n.mobile).map(({ to, label, icon: Icon }) => (
           <NavLink

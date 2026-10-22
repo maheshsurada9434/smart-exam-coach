@@ -155,6 +155,7 @@ function Runner({ session, questions }: { session: Session; questions: Question[
           }}
           locked={learningLocked}
           reveal={learningLocked}
+          celebrate={!timed}
         />
         {!timed && !learningLocked && (
           <div className="mt-4 flex flex-wrap gap-3">
