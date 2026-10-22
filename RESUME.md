@@ -20,6 +20,9 @@ This project is built in day-wise stages. If a session ends (token limit, crash,
   then STOP and tell the user: "70% token limit reached, stopping. Resume from PROGRESS.md."
 - Do not start any new task after this point.
 - Claude cannot see the account's weekly limit; the user should check Settings > Usage for that.
+- Weekly baseline: 29% used on Thu 22 Oct 2026 11:25 (resets Mon 10:30 PM). Hard stop when the user
+  reports weekly usage at 70%. At the start of each session, ask the user for the current weekly %.
+  If it is already 70% or more, do not start any work.
 
 ## Rules that never change
 - No AI/LLM/API anywhere in the app. No paid services. No backend. No fabricated questions or exam facts.
