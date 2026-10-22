@@ -40,7 +40,7 @@ Development happened in a session that could not reach npm, so **every check bel
   320/375 px overflow, reduced motion, live smoke. Bundle now ≈278 KB JS + 5.9 KB CSS gzipped (plus fonts).
 
 ## Not done / not verified
-- Exam patterns are not checked against official notification PDFs (marked *secondary* in the app). Andaman patterns missing.
+- Exam patterns are not checked against official notification PDFs (marked *secondary* in the app). Only the A&N Matric Level (Group C) 2026 pattern is included; other A&N posts are not.
 - Starter questions and content (1,685 + 695) are written by Claude and not expert-reviewed; current affairs come from secondary sources.
 - Manual testing on physical phones, screen readers and Safari/Firefox was not performed (automated tests use Chromium).
 - App installability (PWA install prompt) was not tested; offline mode was.
