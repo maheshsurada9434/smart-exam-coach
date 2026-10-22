@@ -1,0 +1,4 @@
+id,pack,kind,front,back,telugu,synonyms,antonyms,examples,article,text_type,source_label,source_url,published_on,reviewed_on,tags,verification,language
+EX-W1,my-vocab,word,EXAMPLE (replace me): Lucid,Clear and easy to understand,,Clear|Transparent,Obscure,Her explanation was lucid.,,,Your source,,,,,unverified,en
+EX-P1,my-polity,polity,EXAMPLE (replace me): Article 15,Prohibits discrimination on grounds of religion race caste sex or place of birth.,,,,,15,simplified,Your source,,,,,unverified,en
+EX-C1,my-current,current-affairs,EXAMPLE (replace me): headline,One-line summary of the news item.,,,,,,,Newspaper or official site,https://example.org/news,2026-10-01,,economy,unverified,en

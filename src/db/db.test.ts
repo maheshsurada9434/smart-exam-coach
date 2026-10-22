@@ -11,7 +11,7 @@ beforeEach(async () => {
 
 describe('database', () => {
   it('opens empty with the latest schema version and default prefs', async () => {
-    expect(db.verno).toBe(3)
+    expect(db.verno).toBe(4)
     expect(await db.attempts.count()).toBe(0)
     expect(await getPrefs()).toEqual({ prefs: DEFAULT_PREFS, malformed: false })
   })
@@ -38,7 +38,7 @@ describe('database', () => {
 
     const v2 = new ExamDB(name)
     await v2.open()
-    expect(v2.verno).toBe(3)
+    expect(v2.verno).toBe(4)
     expect(await v2.questions.get('q1')).toEqual({ id: 'q1', examCodes: ['SSC_CGL'], text: 'x' })
     expect(await v2.attempts.get('a1')).toEqual({ id: 'a1' })
     expect(await v2.questions.where('examCodes').equals('SSC_CGL').count()).toBe(1)

@@ -32,6 +32,7 @@ export class ExamDB extends Dexie {
   declare importLogs: Table<Row, string>
   declare questionVersions: Table<Row, string>
   declare errorReports: Table<Row, string>
+  declare contentItems: Table<Row, string>
 
   constructor(name = DB_NAME) {
     super(name)
@@ -69,6 +70,8 @@ export class ExamDB extends Dexie {
       )
     // v3 (Day 4): students can report a problem with a question.
     this.version(3).stores({ errorReports: 'id, questionId, status, createdAt' })
+    // v4 (Day 7): study content (vocabulary, idioms, polity, current affairs ...). Admin data, not in student backups.
+    this.version(4).stores({ contentItems: 'id, pack, kind' })
   }
 }
 
