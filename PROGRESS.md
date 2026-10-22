@@ -19,10 +19,10 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - [x] Day 1 checks pass (lint, typecheck, test, build) and committed
 
 ## Day 2: Data layer + exams
-- [~] Dexie schema + migrations (written, waiting for CI)
-- [~] Exam/syllabus config data (written, waiting for CI)
-- [~] Backup export/restore + validation (written, waiting for CI)
-- [ ] Day 2 tests + checks pass, committed
+- [x] Dexie schema + migrations
+- [x] Exam/syllabus config data
+- [x] Backup export/restore + validation
+- [x] Day 2 tests + checks pass, committed
 
 ## Day 3: Question bank + import
 - [ ] Zod schema + JSON schema doc + validation + duplicates
@@ -71,3 +71,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: Route changed: npm is blocked here, so all installs/checks run in GitHub Actions on maheshsurada9434/smart-exam-coach. Day 1 code written and pushed. Pages must be enabled by the user (Settings > Pages > Source: GitHub Actions); this session cannot call that API. Next: read CI result, fix, commit package-lock.json from the CI artifact.
 - 2026-10-22: DAY 1 DONE. CI run 39760679069: install, lint, typecheck, 3 unit tests, build, Pages deploy all green. package-lock.json committed by CI (next runs use npm ci). Live URL https://maheshsurada9434.github.io/smart-exam-coach/ serves title 'Smart Exam Coach'. NOT verified: assets/JS in a real browser, mobile visuals (this session cannot reach github.io from a browser). Next: Day 2.
 - 2026-10-22: Day 2 code written (Dexie db, prefs, backup, exams data from secondary sources, Syllabus + Settings screens, tests). Pushed; waiting for CI.
+- 2026-10-22: DAY 2 DONE. CI run 39762388649 green (lint, typecheck, unit + screen tests, build, deploy). Fixed: settings form race on load, toasts moved inside App. Exam patterns are 'secondary' (coaching-site summaries), not checked against ssc.gov.in PDFs; Andaman has no pattern. React Hook Form not used (2 fields). Next: Day 3 question bank + CSV import.
