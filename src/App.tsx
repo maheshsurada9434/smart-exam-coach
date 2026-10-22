@@ -19,6 +19,7 @@ const BUILT: Record<string, LazyExoticComponent<ComponentType>> = {
   '/mock-tests': lazy(() => import('./pages/MockTests')),
   '/planner': lazy(() => import('./pages/Planner')),
   '/revision': lazy(() => import('./pages/Revision')),
+  '/performance': lazy(() => import('./pages/Performance')),
 }
 
 const Loading = () => (
