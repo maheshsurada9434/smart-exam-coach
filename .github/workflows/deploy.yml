@@ -60,6 +60,8 @@ jobs:
   e2e:
     timeout-minutes: 20
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -73,6 +75,15 @@ jobs:
         run: npm run build
       - name: End-to-end tests (production build, /smart-exam-coach/ base path)
         run: npm run e2e
+      # Design-review screenshots go to the `screenshots` branch (overwritten each run).
+      - name: Publish screenshots
+        if: ${{ success() && github.event_name == 'push' }}
+        continue-on-error: true
+        run: |
+          cd screenshots
+          git init -q && git checkout -q -b screenshots
+          git add . && git -c user.name="github-actions[bot]" -c user.email="41898299+github-actions[bot]@users.noreply.github.com" commit -qm "Screenshots for ${GITHUB_SHA}"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" screenshots
       # Measurements are reported as notices and never block a deploy.
       - name: Bundle sizes
         if: ${{ !cancelled() }}
