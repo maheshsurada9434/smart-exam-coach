@@ -74,6 +74,9 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - [x] Read ui-ux-pro-max skill, write design decisions
 - [x] Apply design system + motion, CI green (incl. e2e + axe)
 
+## Day 11: Glass redesign (user request)
+- [~] Glass design system + surprising motion (aurora, view-transition theme switch, confetti/shake, tilt, sheen, blur-in pages), CI green (written, waiting for CI)
+
 ## Session log
 - 2026-10-22: Created resume system and day-wise plan. Starting Day 1.
 - 2026-10-22: Added 70% token stop rule (stop at 4,500,000 tokens left of 15,000,000).
@@ -101,3 +104,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: Day 9 material built by `node scripts/build-starter.mjs`: 1,685 questions (QA 410, RE 400, EN 481, GA 368, CA 26) + 695 content entries in public/data/. A&N Combined Matric Level 2026 Tier I pattern added (secondary sources). Fixed normalize() so '-1' != '1' and math operators count. Loader UI + tests written; waiting for CI.
 - 2026-10-22: Day 9 CI: unit tests green (all starter items validate; full mocks for every exam); e2e failed on /question-bank mobile overflow from the starter card -> restacked. Day 10 design decisions (ui-ux-pro-max): editorial-paper style kept (warm white, navy ink, teal accent); Bricolage Grotesque headings + Inter body (bundled via @fontsource, offline); Today hero card with progress ring; CountUp on real numbers; staggered list entrances; hover lift; answer reveal pop; lettered option badges; sidebar active bar; bottom-nav pill; timer announces at 5 and 1 min; all motion off under reduced motion; no motion on exam timer.
 - 2026-10-22: DAY 9 + DAY 10 DONE. CI run 39786735426 all green (unit, e2e 8/8 incl. axe light/dark + 320/375 overflow, deploy, live smoke). Fixes found by e2e: option accessible names after badge redesign; long A&N exam name widened selects on phones (renamed to 'A&N Matric Level (Group C)' + max-w-full on selects); edit-script misplaced imports. Lighthouse step produced no number this run (non-blocking).
+- 2026-10-22: User disliked the editorial style; asked for glass + surprising animation (ui-ux-pro-max). Built glass tokens (translucent surfaces, blur, aurora background frozen during sessions), circular theme reveal, confetti on correct answers/done tasks/quiz, shake on wrong, 3D tilt + pointer sheen (desktop), blur-in page transitions, shimmer primary buttons. Reduced motion and reduced transparency respected. Light accent darkened to #0d6b63 for AA on glass.

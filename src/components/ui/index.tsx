@@ -16,8 +16,8 @@ const cx = (...c: (string | false | undefined)[]) => c.filter(Boolean).join(' ')
 /* Button */
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
 const variants: Record<Variant, string> = {
-  primary: 'bg-accent text-accent-ink hover:opacity-90',
-  secondary: 'bg-surface border border-border text-ink hover:bg-surface-2',
+  primary: 'btn-primary bg-accent text-accent-ink',
+  secondary: 'bg-surface border border-border text-ink hover:bg-surface-2 backdrop-blur-sm',
   ghost: 'text-ink hover:bg-surface-2',
   danger: 'bg-danger text-white hover:opacity-90',
 }
@@ -44,7 +44,7 @@ export function Button({
 export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cx('rounded-lg border border-border bg-surface p-5 shadow-card', className)}
+      className={cx('glass rounded-lg p-5', className)}
       {...props}
     />
   )
@@ -62,7 +62,7 @@ export function Progress({ value, label }: { value: number; label: string }) {
       aria-valuemax={100}
       className="h-2 w-full overflow-hidden rounded-full bg-surface-2"
     >
-      <div className="h-full rounded-full bg-accent transition-[width] duration-base" style={{ width: `${v}%` }} />
+      <div className="h-full rounded-full bg-gradient-to-r from-accent to-accent-2 transition-[width] duration-slow ease-out" style={{ width: `${v}%` }} />
     </div>
   )
 }
@@ -126,7 +126,7 @@ export function Dialog({
       onClick={(e) => e.target === ref.current && onClose()}
       aria-label={title}
       className={cx(
-        'w-full max-w-md border border-border bg-surface p-0 text-ink shadow-pop',
+        'w-full max-w-md border border-border bg-surface p-0 text-ink shadow-pop backdrop-blur-xl',
         sheet ? 'mb-0 mt-auto max-w-none rounded-t-lg pb-safe sm:mb-auto sm:max-w-md sm:rounded-lg' : 'rounded-lg',
       )}
     >
@@ -168,7 +168,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((t) => (
           <div
             key={t.id}
-            className="animate-toast-in rounded-md bg-ink px-4 py-2.5 text-sm text-bg shadow-pop"
+            className="animate-toast-in rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-bg shadow-pop"
           >
             {t.text}
           </div>

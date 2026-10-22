@@ -2,64 +2,90 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Design tokens. Components use these through Tailwind names (bg-surface, text-ink, ...). */
+/* Design tokens: GLASS style. Translucent surfaces over a moving aurora. Components use these through
+   Tailwind names (bg-surface, text-ink, ...). Text colours keep WCAG AA on the frosted surfaces. */
 :root {
-  --color-bg: #fbfaf7;
-  --color-surface: #ffffff;
-  --color-surface-2: #f4f2ec;
-  --color-border: #e6e2d8;
-  --color-ink: #0f1b33;
-  --color-muted: #566074;
-  --color-accent: #0f766e;
+  --color-bg: #e9eef6;
+  --color-surface: rgb(255 255 255 / 0.72);
+  --color-surface-2: rgb(15 27 51 / 0.06);
+  --color-border: rgb(15 27 51 / 0.14);
+  --color-ink: #0c1830;
+  --color-muted: #4d5870;
+  --color-accent: #0d6b63;
+  --color-accent-2: #0e7490;
   --color-accent-ink: #ffffff;
-  --color-accent-soft: #e3f2ef;
+  --color-accent-soft: rgb(222 239 236 / 0.92);
   --color-danger: #b42318;
   --color-success: #067647;
-  --color-warning: #b54708;
-  --color-focus: #0f766e;
+  --color-warning: #a64204;
+  --color-focus: #0d6b63;
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
+  --glass-bg: rgb(255 255 255 / 0.62);
+  --glass-border: rgb(255 255 255 / 0.75);
+  --glass-edge: rgb(15 27 51 / 0.08);
+  --glass-highlight: rgb(255 255 255 / 0.9);
+  --glass-blur: 18px;
+  --aurora-1: #5eead4;
+  --aurora-2: #a5b4fc;
+  --aurora-3: #f9a8d4;
+  --aurora-4: #fde68a;
+  --aurora-opacity: 0.55;
 
-  --shadow-card: 0 1px 2px rgb(15 27 51 / 0.05), 0 1px 3px rgb(15 27 51 / 0.06);
-  --shadow-pop: 0 10px 30px rgb(15 27 51 / 0.14);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
 
-  --shadow-lift: 0 6px 18px rgb(15 27 51 / 0.10);
+  --shadow-card: 0 1px 1px rgb(15 27 51 / 0.04), 0 8px 24px -8px rgb(15 27 51 / 0.18);
+  --shadow-pop: 0 24px 60px -12px rgb(15 27 51 / 0.35);
+  --shadow-lift: 0 18px 40px -12px rgb(15 27 51 / 0.32);
   --dur-fast: 150ms;
-  --dur-base: 220ms;
-  --dur-slow: 420ms;
+  --dur-base: 240ms;
+  --dur-slow: 480ms;
   --ease: cubic-bezier(0.2, 0, 0, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   color-scheme: light;
 }
 
 .dark {
-  --color-bg: #0b1120;
-  --color-surface: #111a2e;
-  --color-surface-2: #17223a;
-  --color-border: #26324c;
-  --color-ink: #e7ecf5;
-  --color-muted: #a0abc0;
+  --color-bg: #050816;
+  --color-surface: rgb(17 24 44 / 0.7);
+  --color-surface-2: rgb(255 255 255 / 0.07);
+  --color-border: rgb(255 255 255 / 0.13);
+  --color-ink: #eef2fa;
+  --color-muted: #a7b2c8;
   --color-accent: #2dd4bf;
-  --color-accent-ink: #042f2b;
-  --color-accent-soft: #123b3a;
-  --color-danger: #f97066;
-  --color-success: #47cd89;
+  --color-accent-2: #22d3ee;
+  --color-accent-ink: #032824;
+  --color-accent-soft: rgb(45 212 191 / 0.16);
+  --color-danger: #fb8a80;
+  --color-success: #5ee0a0;
   --color-warning: #fdb022;
-  --color-focus: #2dd4bf;
+  --color-focus: #5eead4;
 
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
-  --shadow-pop: 0 10px 30px rgb(0 0 0 / 0.5);
-  --shadow-lift: 0 6px 18px rgb(0 0 0 / 0.45);
+  --glass-bg: rgb(16 23 44 / 0.58);
+  --glass-border: rgb(255 255 255 / 0.12);
+  --glass-edge: rgb(0 0 0 / 0.35);
+  --glass-highlight: rgb(255 255 255 / 0.14);
+  --aurora-1: #0d9488;
+  --aurora-2: #4f46e5;
+  --aurora-3: #a21caf;
+  --aurora-4: #0369a1;
+  --aurora-opacity: 0.42;
+
+  --shadow-card: 0 1px 1px rgb(0 0 0 / 0.3), 0 10px 30px -10px rgb(0 0 0 / 0.6);
+  --shadow-pop: 0 30px 70px -10px rgb(0 0 0 / 0.75);
+  --shadow-lift: 0 22px 50px -12px rgb(0 0 0 / 0.7);
 
   color-scheme: dark;
 }
 
-html,
-body {
+html {
   background: var(--color-bg);
+}
+body {
+  background: transparent;
   color: var(--color-ink);
 }
 
@@ -95,19 +121,21 @@ h1 {
 }
 
 @keyframes page-in {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: none; }
+  from { opacity: 0; transform: translateY(14px) scale(0.985); filter: blur(8px); }
+  to { opacity: 1; transform: none; filter: none; }
 }
 @keyframes toast-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: none; }
+  0% { opacity: 0; transform: translateY(24px) scale(0.9); }
+  70% { opacity: 1; transform: translateY(-3px) scale(1.02); }
+  100% { opacity: 1; transform: none; }
 }
 @keyframes rise {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: none; }
 }
 @keyframes pop {
-  0% { opacity: 0; transform: scale(0.97) translateY(4px); }
+  0% { opacity: 0; transform: scale(0.94) translateY(8px); }
+  60% { opacity: 1; transform: scale(1.01); }
   100% { opacity: 1; transform: none; }
 }
 @keyframes backdrop-in {
@@ -119,7 +147,7 @@ h1 {
   50% { opacity: 0.5; }
 }
 
-.animate-page-in { animation: page-in var(--dur-base) var(--ease); }
+.animate-page-in { animation: page-in 520ms var(--ease-out); }
 .animate-toast-in { animation: toast-in var(--dur-base) var(--ease); }
 .animate-shimmer { animation: shimmer 1.4s ease-in-out infinite; }
 .animate-pop { animation: pop var(--dur-base) var(--ease-out); }
@@ -139,10 +167,127 @@ h1 {
 }
 .lift:active { transform: translateY(0) scale(0.99); }
 
-dialog::backdrop { background: rgb(11 17 32 / 0.45); animation: backdrop-in var(--dur-base) var(--ease); }
+dialog::backdrop { background: rgb(5 8 22 / 0.4); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); animation: backdrop-in var(--dur-base) var(--ease); }
 dialog[open] { animation: pop var(--dur-base) var(--ease-out); }
 
 .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+
+@layer components {
+/* ---------- Glass ---------- */
+.glass {
+  position: relative;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(170%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(170%);
+  border: 1px solid var(--glass-border);
+  box-shadow: inset 0 1px 0 var(--glass-highlight), 0 0 0 1px var(--glass-edge), var(--shadow-card);
+}
+/* Light that follows the pointer across glass (desktop). --mx/--my are set by src/components/fx.ts. */
+.glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease);
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgb(255 255 255 / 0.28), transparent 45%);
+}
+.dark .glass::after { background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgb(94 234 212 / 0.12), transparent 45%); }
+@media (hover: hover) { .glass:hover::after { opacity: 1; } }
+
+}
+
+/* Solid surfaces for people who ask the OS for less transparency. */
+@media (prefers-reduced-transparency: reduce) {
+  :root { --glass-bg: #ffffff; --color-surface: #ffffff; }
+  .dark { --glass-bg: #111a2e; --color-surface: #111a2e; }
+  .glass { -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+/* 3D tilt toward the pointer (desktop). --rx/--ry are set by fx.ts. */
+.tilt {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 300ms var(--ease-out);
+  will-change: transform;
+}
+
+/* Primary buttons: gradient with a light sweep on hover. */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+  box-shadow: 0 8px 20px -8px color-mix(in srgb, var(--color-accent) 70%, transparent);
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-120%) skewX(-20deg);
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.45), transparent);
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .btn-primary:hover::before { transform: translateX(120%) skewX(-20deg); transition: transform 700ms var(--ease-out); }
+}
+
+/* ---------- Aurora background ---------- */
+.aurora { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background: var(--color-bg); }
+.aurora span {
+  position: absolute;
+  width: 55vmax;
+  height: 55vmax;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: var(--aurora-opacity);
+  will-change: transform;
+}
+.aurora span:nth-child(1) { background: var(--aurora-1); top: -18vmax; left: -12vmax; animation: drift-a 26s ease-in-out infinite alternate; }
+.aurora span:nth-child(2) { background: var(--aurora-2); top: -10vmax; right: -18vmax; animation: drift-b 32s ease-in-out infinite alternate; }
+.aurora span:nth-child(3) { background: var(--aurora-3); bottom: -22vmax; left: 10vmax; animation: drift-c 38s ease-in-out infinite alternate; }
+.aurora span:nth-child(4) { background: var(--aurora-4); bottom: -18vmax; right: -8vmax; animation: drift-a 44s ease-in-out infinite alternate-reverse; }
+/* Exams stay calm: the background freezes and fades. */
+.aurora[data-calm='true'] span { animation-play-state: paused; opacity: calc(var(--aurora-opacity) * 0.45); transition: opacity 600ms var(--ease); }
+@keyframes drift-a { to { transform: translate(18vmax, 12vmax) scale(1.15) rotate(25deg); } }
+@keyframes drift-b { to { transform: translate(-16vmax, 18vmax) scale(0.9) rotate(-20deg); } }
+@keyframes drift-c { to { transform: translate(12vmax, -16vmax) scale(1.2); } }
+
+/* ---------- Feedback effects ---------- */
+@keyframes shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(3px); }
+  30%, 50%, 70% { transform: translateX(-6px); }
+  40%, 60% { transform: translateX(6px); }
+}
+.animate-shake { animation: shake 480ms var(--ease); }
+
+/* Confetti pieces created by burst() in fx.ts. */
+.fx-layer { position: fixed; inset: 0; pointer-events: none; z-index: 60; overflow: hidden; }
+.fx-piece {
+  position: absolute;
+  width: 8px;
+  height: 12px;
+  border-radius: 2px;
+  animation: fly 900ms cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+}
+@keyframes fly {
+  0% { transform: translate(-50%, -50%) rotate(0) scale(0.6); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--rot)) scale(1); opacity: 0; }
+}
+@keyframes ring-glow {
+  0%, 100% { filter: drop-shadow(0 0 0 transparent); }
+  50% { filter: drop-shadow(0 0 10px color-mix(in srgb, var(--color-accent) 60%, transparent)); }
+}
+.ring-glow { animation: ring-glow 3.2s ease-in-out infinite; }
+
+/* Theme switch: a circle of the new theme grows from the toggle (View Transitions API, where supported). */
+::view-transition-old(root),
+::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+::view-transition-new(root) { animation: theme-reveal 650ms var(--ease-out); }
+@keyframes theme-reveal {
+  from { clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 0%)); }
+  to { clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 0%)); }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -151,4 +296,7 @@ dialog[open] { animation: pop var(--dur-base) var(--ease-out); }
     animation-delay: 0ms !important;
     transition-duration: 0.01ms !important;
   }
+  .aurora span { animation: none !important; }
+  .tilt { transform: none !important; }
+  ::view-transition-new(root) { animation: none !important; }
 }

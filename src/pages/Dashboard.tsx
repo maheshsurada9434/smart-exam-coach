@@ -38,7 +38,7 @@ function Onboarding({ data }: { data: Overview }) {
       <ol className="stagger mt-6 grid gap-4 sm:grid-cols-3">
         {steps.map(([t, d, to, done], i) => (
           <li key={t} style={staggerStyle(i)}>
-            <Card className="lift h-full">
+            <Card className="tilt h-full">
               <h2 className="font-semibold">
                 {i + 1}. {t} {done && <span className="text-sm font-medium text-success">· done</span>}
               </h2>
@@ -112,7 +112,8 @@ function DashboardView({ data, today }: { data: Overview; today: string }) {
       </div>
 
       {/* Today: the one place to start from. Every figure is real. */}
-      <Card className="animate-pop mt-4 flex flex-col gap-5 border-accent bg-gradient-to-br from-accent-soft to-surface p-5 sm:flex-row sm:items-center">
+      <Card className="tilt animate-pop mt-4 flex flex-col gap-5 border-accent p-5 sm:flex-row sm:items-center">
+        <div className={activeTasks > 0 && doneTasks === activeTasks ? 'ring-glow' : ''}>
         <ProgressRing
           value={activeTasks ? (doneTasks / activeTasks) * 100 : 0}
           label={activeTasks ? `${doneTasks} of ${activeTasks} of today's tasks done` : 'No tasks planned today'}
@@ -120,6 +121,7 @@ function DashboardView({ data, today }: { data: Overview; today: string }) {
           <span className="font-display text-xl font-semibold tabular">{activeTasks ? `${doneTasks}/${activeTasks}` : '—'}</span>
           <span className="-mt-1 block text-[11px] text-muted">tasks today</span>
         </ProgressRing>
+        </div>
         <div className="min-w-0 flex-1">
           <p className="text-xs font-medium uppercase tracking-wide text-accent">{greeting()} · Recommended next</p>
           <p className="mt-1 text-base">{next ? next.reason : 'Practise a few questions so the planner can recommend what to study.'}</p>

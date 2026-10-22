@@ -178,7 +178,7 @@ export default function QuestionBank() {
           ) : (
             <ul className="stagger mt-4 space-y-2">
               {filtered.slice(0, limit).map((q, i) => (
-                <li key={q.id} style={staggerStyle(i)} className="rounded-lg border border-border bg-surface p-4">
+                <li key={q.id} style={staggerStyle(i)} className="glass rounded-lg p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <p className="flex flex-wrap items-center gap-2 text-xs text-muted">

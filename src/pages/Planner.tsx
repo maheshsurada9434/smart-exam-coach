@@ -1,3 +1,4 @@
+import { burst } from '../components/fx'
 import { staggerStyle } from '../components/motion'
 import { useEffect, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -186,7 +187,7 @@ function TaskRow({ t, i, first, last, run }: { t: Task; i: number; first: boolea
   const done = t.status === 'done'
   const skipped = t.status === 'skipped'
   return (
-    <li style={staggerStyle(i)} className={`rounded-lg border bg-surface p-4 ${done ? 'border-success' : 'border-border'} ${skipped ? 'opacity-60' : ''}`}>
+    <li style={staggerStyle(i)} className={`glass rounded-lg p-4 ${done ? 'border-success' : ''} ${skipped ? 'opacity-60' : ''}`}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="flex flex-wrap items-center gap-2 text-sm font-semibold">
@@ -219,7 +220,13 @@ function TaskRow({ t, i, first, last, run }: { t: Task; i: number; first: boolea
             Minutes spent
             <input type="number" min={0} max={600} className={`${field} ml-1 w-20`} value={actual} onChange={(e) => setActual(e.target.value)} />
           </label>
-          <Button variant="secondary" onClick={() => run(() => completeTask(t.id, Number(actual) || 0), 'Marked as done')}>
+          <Button
+            variant="secondary"
+            onClick={(e) => {
+              burst(e.currentTarget)
+              run(() => completeTask(t.id, Number(actual) || 0), 'Marked as done')
+            }}
+          >
             <Check size={16} aria-hidden /> Done
           </Button>
           <Button variant="ghost" onClick={() => run(() => skipTask(t.id))}>
@@ -250,7 +257,7 @@ function AddTask({ date, run }: { date: string; run: (fn: () => Promise<unknown>
   const [topic, setTopic] = useState('')
   const [mins, setMins] = useState('15')
   return (
-    <details className="mt-4 rounded-lg border border-border bg-surface p-4">
+    <details className="mt-4 glass rounded-lg p-4">
       <summary className="cursor-pointer text-sm font-medium">Add your own task</summary>
       <div className="mt-3 flex flex-wrap items-end gap-2">
         <label className="text-xs">
@@ -298,7 +305,7 @@ function WeekView({ today, week, studyDays, onOpen, onRegenerate }: { today: str
           const rest = !studyDays.includes(weekday(d))
           return (
             <li key={d}>
-              <button type="button" onClick={() => onOpen(d)} className="lift flex w-full flex-wrap items-center justify-between gap-2 rounded-lg border border-border bg-surface p-4 text-left text-sm hover:bg-surface-2">
+              <button type="button" onClick={() => onOpen(d)} className="lift flex w-full flex-wrap items-center justify-between gap-2 glass rounded-lg p-4 text-left text-sm hover:bg-surface-2">
                 <span className="font-medium">
                   {WEEKDAYS[weekday(d)]} {d}
                   {d === today && ' (today)'}

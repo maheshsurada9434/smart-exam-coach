@@ -159,7 +159,7 @@ export default function MockTests() {
         <ul className="stagger mt-3 space-y-2">
           {data.history.map((h, i) => (
             <li key={h.id} style={staggerStyle(i)}>
-              <Link to={`/mock-tests/run/${h.id}`} className="lift flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border bg-surface p-4 text-sm hover:bg-surface-2">
+              <Link to={`/mock-tests/run/${h.id}`} className="lift flex flex-wrap items-center justify-between gap-2 glass rounded-lg p-4 text-sm hover:bg-surface-2">
                 <span>
                   <strong>{EXAMS.find((e) => e.code === h.examCode)?.name ?? h.examCode}</strong> · {h.paperName}
                   {h.sectionName ? ` · ${h.sectionName}` : ''}
