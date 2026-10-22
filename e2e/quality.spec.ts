@@ -42,6 +42,8 @@ test('respects prefers-reduced-motion', async ({ page }) => {
 
 for (const theme of ['light', 'dark'] as const) {
   test(`no serious or critical accessibility violations (${theme})`, async ({ page }) => {
+    // No fade-in during the scan, so contrast is measured on fully opaque text.
+    await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.goto('./')
     await chooseExam(page)
     await loadSample(page)
@@ -50,7 +52,6 @@ for (const theme of ['light', 'dark'] as const) {
     for (const r of ROUTES) {
       await page.goto(`./#/${r}`)
       await expect(page.locator('main h1').first()).toBeVisible()
-      await page.waitForTimeout(300) // let entrance animations finish before checking contrast
       const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()
       for (const v of res.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical'))
         problems.push(`/${r}: ${v.id} (${v.impact}) ${v.nodes.slice(0, 3).map((n) => n.target.join(' ')).join(' | ')}`)
