@@ -1,28 +1,28 @@
-import { useEffect, useState, type ChangeEvent } from 'react'
+import { useState, type ChangeEvent } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { Download, Upload } from 'lucide-react'
-import { Button, Card, Dialog, useToast } from '../components/ui'
+import { Button, Card, Dialog, Skeleton, useToast } from '../components/ui'
 import { EXAMS } from '../data/exams'
 import { describeDbError } from '../db/db'
-import { getPrefs, savePrefs } from '../db/prefs'
+import { getPrefs, savePrefs, type Prefs } from '../db/prefs'
 import { exportBackup, parseBackup, restoreBackup, type ParseResult, type RestoreMode } from '../db/backup'
 
 const field = 'mt-1 block min-h-11 w-full rounded-md border border-border bg-surface px-3 text-sm'
 
 export default function Settings() {
-  const toast = useToast()
   const saved = useLiveQuery(() => getPrefs())
-  const [examCode, setExamCode] = useState('')
-  const [minutes, setMinutes] = useState('60')
+  // Render the form only once stored prefs are loaded, so early typing is never overwritten.
+  if (!saved) return <Skeleton className="h-64 w-full max-w-2xl" />
+  return <SettingsForm key={JSON.stringify(saved.prefs)} prefs={saved.prefs} malformed={saved.malformed} />
+}
+
+function SettingsForm({ prefs, malformed }: { prefs: Prefs; malformed: boolean }) {
+  const toast = useToast()
+  const [examCode, setExamCode] = useState(prefs.examCode ?? '')
+  const [minutes, setMinutes] = useState(String(prefs.dailyMinutes))
   const [error, setError] = useState('')
   const [file, setFile] = useState<ParseResult | null>(null)
   const [confirmReplace, setConfirmReplace] = useState(false)
-
-  useEffect(() => {
-    if (!saved) return
-    setExamCode(saved.prefs.examCode ?? '')
-    setMinutes(String(saved.prefs.dailyMinutes))
-  }, [saved])
 
   const mins = Number(minutes)
   const minutesInvalid = !Number.isInteger(mins) || mins < 10 || mins > 720
@@ -79,7 +79,7 @@ export default function Settings() {
           {error}
         </p>
       )}
-      {saved?.malformed && (
+      {malformed && (
         <p role="alert" className="mt-4 rounded-md border border-warning px-4 py-3 text-sm text-warning">
           Your saved settings could not be read, so defaults are shown. Saving will replace them.
         </p>
