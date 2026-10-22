@@ -7,7 +7,7 @@ test('live site: assets, routing, IndexedDB, service worker and offline', async 
 
   await page.goto('./')
   await expect(page.getByRole('heading', { name: /Welcome to Smart Exam Coach|Dashboard/ })).toBeVisible()
-  const css = await page.evaluate(() => getComputedStyle(document.body).backgroundColor)
+  const css = await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor)
   expect(css, 'stylesheet loaded').not.toBe('rgba(0, 0, 0, 0)')
 
   // Internal navigation and refresh on a deep link.
