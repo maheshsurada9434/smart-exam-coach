@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { Button, Dialog, useToast } from './ui'
-import { describeDbError } from '../db/db'
+import { db, describeDbError } from '../db/db'
 import { saveQuestionEdit, versionHistory } from '../questions/repo'
 import { DIFFICULTIES, OPTION_LETTERS, allowedStatuses, type Question } from '../questions/schema'
 
@@ -12,6 +12,7 @@ export default function QuestionEditDialog({ question, onClose }: { question: Qu
   const [q, setQ] = useState<Question>(question)
   const [errors, setErrors] = useState<string[]>([])
   const history = useLiveQuery(() => versionHistory(question.id), [question.id])
+  const reports = useLiveQuery(() => db.errorReports.where('questionId').equals(question.id).reverse().sortBy('createdAt'), [question.id])
   const set = (patch: Partial<Question>) => setQ((cur) => ({ ...cur, ...patch }) as Question)
 
   async function save() {
@@ -100,6 +101,26 @@ export default function QuestionEditDialog({ question, onClose }: { question: Qu
           </label>
         </div>
 
+        {reports && reports.length > 0 && (
+          <div className="text-sm">
+            <p className="font-medium">Reports from students ({reports.length})</p>
+            <ul className="mt-2 space-y-2">
+              {reports.map((r) => (
+                <li key={r.id} className="rounded-md border border-border p-2">
+                  <p>
+                    <strong>{String(r.reason)}</strong> · v{String(r.questionVersion)} · {new Date(String(r.createdAt)).toLocaleDateString()} · {String(r.status)}
+                  </p>
+                  {!!r.details && <p className="mt-1 text-muted">{String(r.details)}</p>}
+                  {r.status === 'open' && (
+                    <Button variant="ghost" className="mt-1" onClick={() => db.errorReports.update(r.id, { status: 'resolved' })}>
+                      Mark resolved
+                    </Button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         {history && history.length > 0 && (
           <details className="text-sm">
             <summary className="cursor-pointer font-medium">Version history ({history.length})</summary>

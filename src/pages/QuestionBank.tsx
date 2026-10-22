@@ -5,7 +5,7 @@ import { Button, Card, EmptyState, Skeleton, useToast } from '../components/ui'
 import QuestionImport from '../components/QuestionImport'
 import QuestionEditDialog from '../components/QuestionEditDialog'
 import { EXAMS, SUBJECTS } from '../data/exams'
-import { describeDbError } from '../db/db'
+import { db, describeDbError } from '../db/db'
 import { downloadText } from '../download'
 import { questionsToCsv } from '../questions/csv'
 import { loadDevSample, loadQuestions, questionsToJson, removeDevSample } from '../questions/repo'
@@ -17,6 +17,11 @@ const PAGE = 50
 export default function QuestionBank() {
   const toast = useToast()
   const data = useLiveQuery(() => loadQuestions())
+  const openReports = useLiveQuery(async () => {
+    const m = new Map<string, number>()
+    for (const r of await db.errorReports.where('status').equals('open').toArray()) m.set(String(r.questionId), (m.get(String(r.questionId)) ?? 0) + 1)
+    return m
+  })
   const [exam, setExam] = useState('')
   const [subject, setSubject] = useState('')
   const [status, setStatus] = useState('')
@@ -142,6 +147,11 @@ export default function QuestionBank() {
                         <span className="font-mono">{q.id}</span>
                         <span>· {q.subject} · {q.topic} · {q.difficulty}</span>
                         <span className="rounded bg-surface-2 px-1.5 py-0.5 font-medium text-ink">{q.status}</span>
+                        {!!openReports?.get(q.id) && (
+                          <span className="rounded border border-danger px-1.5 py-0.5 font-medium text-danger">
+                            {openReports.get(q.id)} open report{openReports.get(q.id) === 1 ? '' : 's'}
+                          </span>
+                        )}
                         {q.source.kind === 'dev-sample' && <span className="rounded border border-warning px-1.5 py-0.5 font-medium text-warning">DEV SAMPLE</span>}
                       </p>
                       <p className="mt-1 text-sm">{q.text}</p>
