@@ -3,6 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { Link } from 'react-router-dom'
 import { Database, Download, Upload } from 'lucide-react'
 import { downloadText } from '../download'
+import { WEEKDAYS } from '../learning/dates'
 import { Button, Card, Dialog, Skeleton, useToast } from '../components/ui'
 import { EXAMS } from '../data/exams'
 import { describeDbError } from '../db/db'
@@ -22,6 +23,8 @@ function SettingsForm({ prefs, malformed }: { prefs: Prefs; malformed: boolean }
   const toast = useToast()
   const [examCode, setExamCode] = useState(prefs.examCode ?? '')
   const [minutes, setMinutes] = useState(String(prefs.dailyMinutes))
+  const [days, setDays] = useState<number[]>(prefs.studyDays)
+  const [targetDate, setTargetDate] = useState(prefs.targetDate ?? '')
   const [error, setError] = useState('')
   const [file, setFile] = useState<ParseResult | null>(null)
   const [confirmReplace, setConfirmReplace] = useState(false)
@@ -32,7 +35,7 @@ function SettingsForm({ prefs, malformed }: { prefs: Prefs; malformed: boolean }
   async function save() {
     if (minutesInvalid) return
     try {
-      await savePrefs({ examCode: examCode || null, dailyMinutes: mins })
+      await savePrefs({ examCode: examCode || null, dailyMinutes: mins, studyDays: [...days].sort((a, b) => a - b), targetDate: targetDate || null })
       toast('Settings saved')
     } catch (e) {
       setError(describeDbError(e))
@@ -112,6 +115,26 @@ function SettingsForm({ prefs, malformed }: { prefs: Prefs; malformed: boolean }
         <p id="minutes-help" className={`mt-1 text-xs ${minutesInvalid ? 'text-danger' : 'text-muted'}`}>
           Enter a whole number from 10 to 720.
         </p>
+        <fieldset className="mt-4">
+          <legend className="text-sm font-medium">Study days</legend>
+          <div className="mt-1 flex flex-wrap gap-1">
+            {WEEKDAYS.map((d, i) => (
+              <label key={d} className={`flex min-h-11 min-w-11 cursor-pointer items-center justify-center gap-1 rounded-md border px-2 text-sm ${days.includes(i) ? 'border-accent bg-accent-soft' : 'border-border'}`}>
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={days.includes(i)}
+                  onChange={(e) => setDays((cur) => (e.target.checked ? [...cur, i] : cur.filter((x) => x !== i)))}
+                />
+                {d}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <label className="mt-4 block text-sm font-medium">
+          Exam date (optional)
+          <input type="date" className={field} value={targetDate} onChange={(e) => setTargetDate(e.target.value)} />
+        </label>
         <Button className="mt-4" onClick={save} disabled={minutesInvalid}>
           Save preferences
         </Button>

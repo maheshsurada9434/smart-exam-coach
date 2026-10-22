@@ -8,7 +8,8 @@ import { describeDbError } from '../db/db'
 import { getPrefs } from '../db/prefs'
 import { loadQuestions } from '../questions/repo'
 import { DIFFICULTIES } from '../questions/schema'
-import { MODE_LABELS, SELECTION_MODES, WEAK_RULE, eligible, seededRng, selectQuestions, type SelectionMode } from '../practice/engine'
+import { MASTERY } from '../learning/mastery'
+import { MODE_LABELS, SELECTION_MODES, eligible, seededRng, selectQuestions, type SelectionMode } from '../practice/engine'
 import { abandonSession, activeSession, bookmarkIds, loadAttempts, startSession } from '../practice/repo'
 
 const field = 'mt-1 block min-h-11 w-full rounded-md border border-border bg-surface px-3 text-sm'
@@ -23,7 +24,15 @@ export default function Practice() {
     active: await activeSession(),
   }))
   if (!data) return <Skeleton className="h-96 w-full" />
-  return <PracticeSetup data={data} initialMode={params.get('mode') as SelectionMode | null} />
+  return (
+    <PracticeSetup
+      data={data}
+      initialMode={params.get('mode') as SelectionMode | null}
+      initialSubject={params.get('subject')}
+      initialTopic={params.get('topic')}
+      initialTimed={params.get('timed') === '1'}
+    />
+  )
 }
 
 type Data = {
@@ -34,16 +43,18 @@ type Data = {
   active: Awaited<ReturnType<typeof activeSession>>
 }
 
-function PracticeSetup({ data, initialMode }: { data: Data; initialMode: SelectionMode | null }) {
+type SetupProps = { data: Data; initialMode: SelectionMode | null; initialSubject: string | null; initialTopic: string | null; initialTimed: boolean }
+
+function PracticeSetup({ data, initialMode, initialSubject, initialTopic, initialTimed }: SetupProps) {
   const toast = useToast()
   const navigate = useNavigate()
   const [examCode, setExamCode] = useState(data.prefs.examCode ?? EXAMS[0]!.code)
   const [mode, setMode] = useState<SelectionMode>(initialMode && SELECTION_MODES.includes(initialMode) ? initialMode : 'mixed')
-  const [subject, setSubject] = useState<string>(SUBJECTS[0])
-  const [topic, setTopic] = useState('')
+  const [subject, setSubject] = useState<string>(SUBJECTS.find((x) => x === initialSubject) ?? SUBJECTS[0])
+  const [topic, setTopic] = useState(initialTopic ?? '')
   const [difficulty, setDifficulty] = useState('')
   const [count, setCount] = useState(10)
-  const [timed, setTimed] = useState(false)
+  const [timed, setTimed] = useState(initialTimed)
   const [minutes, setMinutes] = useState(10)
   const [busy, setBusy] = useState(false)
 
@@ -135,7 +146,8 @@ function PracticeSetup({ data, initialMode }: { data: Data; initialMode: Selecti
             </div>
             {mode === 'weak' && (
               <p className="mt-2 text-xs text-muted">
-                A topic counts as weak after at least {WEAK_RULE.minAttempts} attempts with under {WEAK_RULE.maxAccuracy * 100}% correct.
+                A topic counts as weak after at least {MASTERY.minAttempts} attempts with under {MASTERY.developingAccuracy * 100}% correct in
+                its last {MASTERY.recentWindow} attempts.
               </p>
             )}
           </fieldset>

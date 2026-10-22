@@ -44,9 +44,9 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - [x] Day 5 checks pass, committed
 
 ## Day 6: Algorithms
-- [ ] Mastery + recommendations
-- [ ] Study planner
-- [ ] SM-2 revision + sessions
+- [~] Mastery + recommendations (written, waiting for CI)
+- [~] Study planner (written, waiting for CI)
+- [~] SM-2 revision + sessions (written, waiting for CI)
 - [ ] Day 6 tests + checks pass, committed
 
 ## Day 7: Dashboard + content
@@ -78,3 +78,4 @@ Legend: `[ ]` not started, `[~]` in progress, `[x]` done AND verified.
 - 2026-10-22: DAY 4 DONE. CI run 39765053778 green first try (engine, sessions, timed submit idempotency, malformed session guard, end-to-end practice screen test). Weak-topic rule is a simple placeholder (>=5 attempts, <60%) until Day 6 mastery. Error reports stay in this browser only. Next: Day 5 mock test engine.
 - 2026-10-22: Day 5 code written: pure scoring (per-section, fractional, round2), buildMock from exam pattern (approved/published only, partial flag + scaled time), deadline-based saves, auto-submit, idempotent submit with frozen result, palette with 5 states, results by section/topic + review, history. Pushed; waiting for CI.
 - 2026-10-22: DAY 5 DONE. CI green after 2 fixes (TS duplicate-key in asMock; Dialog fallback when showModal missing). Tests cover all spec-12 cases: all correct/incorrect/unanswered, mixed, fractional, section marking, timeout, refresh, interrupted, duplicate submit, frozen score. Limitation: local timer/storage is not tamper-proof. Sectional time is proportional (not official). Next: Day 6 mastery, planner, SM-2.
+- 2026-10-22: Day 6 code written: dates, mastery labels (docs/ALGORITHMS.md), SM-2, recommendations with reasons, budget-capped planner (day/week, edit, reorder, skip, done+actual, reschedule, manual tasks), Revision (MCQ recall + flashcards, summary), Settings study days + exam date. Practice weak mode now uses mastery. Pushed; waiting for CI.
