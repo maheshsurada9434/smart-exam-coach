@@ -56,8 +56,46 @@ jobs:
         with:
           path: dist
 
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Install
+        run: npm ci || npm install
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Build
+        run: npm run build
+      - name: End-to-end tests (production build, /smart-exam-coach/ base path)
+        run: npm run e2e
+      # Measurements are reported as notices and never block a deploy.
+      - name: Bundle sizes
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        run: |
+          node -e '
+            const fs=require("fs"),z=require("zlib"),d="dist/assets";
+            const f=fs.readdirSync(d).map(n=>{const b=fs.readFileSync(d+"/"+n);return{n,raw:b.length,gz:z.gzipSync(b).length}});
+            const kb=x=>(x/1024).toFixed(1)+" KB";
+            const sum=(ext)=>f.filter(x=>x.n.endsWith(ext)).reduce((a,x)=>a+x.gz,0);
+            const top=f.filter(x=>x.n.endsWith(".js")).sort((a,b)=>b.gz-a.gz).slice(0,4).map(x=>x.n.replace(/-[\w-]{8}\.js$/,"")+" "+kb(x.gz)).join(", ");
+            console.log("::notice title=Bundle (gzip)::JS total "+kb(sum(".js"))+", CSS "+kb(sum(".css"))+"; largest: "+top);'
+      - name: Lighthouse (mobile, local preview)
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        run: |
+          npm run preview -- --port 4173 --strictPort &
+          sleep 4
+          npx -y lighthouse@12.3.0 http://localhost:4173/smart-exam-coach/ --only-categories=performance,accessibility,best-practices --form-factor=mobile --chrome-flags="--headless=new --no-sandbox" --output=json --output-path=lh.json --quiet
+          node -e '
+            const r=require("./lh.json"),a=r.audits;
+            console.log("::notice title=Lighthouse mobile::"+Object.values(r.categories).map(c=>c.title+" "+Math.round(c.score*100)).join(", ")+" | FCP "+a["first-contentful-paint"].displayValue+", LCP "+a["largest-contentful-paint"].displayValue+", TBT "+a["total-blocking-time"].displayValue+", CLS "+a["cumulative-layout-shift"].displayValue);'
+
   deploy:
-    needs: check
+    needs: [check, e2e]
     if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     environment:
