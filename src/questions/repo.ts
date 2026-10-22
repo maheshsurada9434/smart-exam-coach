@@ -82,7 +82,10 @@ export async function buildPreview(fileName: string, text: string): Promise<Impo
     const keyLine = firstKey.get(key)
     if (idLine !== undefined) fail(r, `Duplicate ID in this file (first used on line ${idLine})`)
     else if (keyLine !== undefined) fail(r, `Same question as line ${keyLine} in this file`)
-    else firstId.set(r.id, r.line), firstKey.set(key, r.line)
+    else {
+      firstId.set(r.id, r.line)
+      firstKey.set(key, r.line)
+    }
   }
 
   // Against the stored bank.
